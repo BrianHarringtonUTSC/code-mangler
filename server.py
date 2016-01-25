@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask.ext.mongoengine import MongoEngine
 
 # Initialize Flask
@@ -11,14 +11,14 @@ db = MongoEngine(app)
 def root():
 	return app.send_static_file('index.html')
 
-@app.route('/question', methods = ['GET', 'POST', 'DELETE'])
+@app.route('/question', methods = ['GET'])
 def api_question():
-	if request.method == 'GET':
-		return 'GET\n';
-	elif request.method == 'POST':
-		return 'POST\n'
-	elif request.method == 'DELETE':
-		return 'DELETE\n'
+	# For now the return data is hardcoded
+	temp = [{'topic':'For Loops'},
+			{'lines':['for w in words','print w, len(w)']}]
+	# Jsonify and return the data
+	response = jsonify(results=temp)
+	return response
 
 if __name__ == '__main__':
     app.run(port=8000)

@@ -1,0 +1,35 @@
+body{
+    font-family: Monaco;
+}
+
+.ui-drop-hover {
+}
+
+#dragdiv li, #dropdiv li {
+    border: 1px ridge lightgray;
+    padding-left: 1em;
+}
+
+#maindiv {
+    border: 1px outset lightgray;
+}
+
+#allItems, #Ul1 {
+    list-style: none;
+}
+
+#dragdiv, #dropdiv {
+    padding: 2em;
+    width: 55%;
+    height: 80%;.
+}
+
+li{
+    font-family: Consolas;
+}
+
+#title{
+    padding-left: 4em;
+    font-family: 'Comic Sans MS';
+}
+

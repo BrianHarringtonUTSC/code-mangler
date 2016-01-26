@@ -12,16 +12,17 @@ connect('codemangler', host='localhost', port=27017)
 
 
 @app.route('/')
-def hello_world():
-    hello2()
-    return "Hello World"
-
-def hello2():
-    return "After Hello World"
-
-def root():
+def index():
     return app.send_static_file('index.html')
 
+@app.route('/main')
+def mainPage():
+    return app.send_static_file('tmpl/Home.html')
+
+@app.route('/login', methods=['GET'])
+def login():
+    return '<form method="get" action="/login"><input type="text" name="username" />' \
+           '<buttom type="submit">Submit</button></form>'
 
 @app.route('/question', methods=['GET'])
 def get_question():
@@ -52,4 +53,5 @@ def post_question():
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 8000))
-    app.run(debug=True, port=port)
+    app.debug = True
+    app.run(port=port)

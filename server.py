@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, abort
 from mongoengine import connect
 from models import *
 from logic import *
+import os
 
 # Initialize Flask
 app = Flask(__name__, static_url_path='')
@@ -11,6 +12,13 @@ connect('codemangler', host='localhost', port=27017)
 
 
 @app.route('/')
+def hello_world():
+    hello2()
+    return "Hello World"
+
+def hello2():
+    return "After Hello World"
+
 def root():
     return app.send_static_file('index.html')
 
@@ -43,4 +51,5 @@ def post_question():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    port = int(os.getenv("PORT", 8000))
+    app.run(debug=True, port=port)

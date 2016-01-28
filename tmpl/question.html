@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h4>{{question}}</h4>
+
+	<div class="lines">
+	{% for line in lines %}
+		<div class="line">{{line}}</div>
+	{% endfor%}
+	</div>
+
+  	<input id="answerText" input="text" />
+	<button id="answerQuestion" value="{{id}}">Submit</button>
+{% endblock %}

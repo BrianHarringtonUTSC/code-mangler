@@ -1,48 +1,40 @@
+from collections import namedtuple
 from flask import Flask, jsonify, request, abort, render_template
-from mongoengine import connect
 
-import models
-import logic
+import model
 import os
+import sys
+import re
 
 app = Flask(__name__, static_url_path='', template_folder='tmpl/')
 
-connect('codemangler', host='localhost', port=27017)
+Question = namedtuple('Question', 'id question solution scramble_order')
 
+answer_regex = re.compile('^((\s*[0-9]+),)+(\s*[0-9]+)$')
+
+# hardcoded data for now. TODO: add DB
+data = Question(1, 'Calculate sum of a list of numbers.',
+        ['def sum(L):', '  sum = 0', '  for item in L:', '    sum += item', '  return sum'], [4, 1, 2, 3, 0])
 
 @app.route('/')
 def index():
-    return render_template('Home.html')
+    return render_template('drag.html')
 
-@app.route('/login', methods=['GET'])
-def login():
-    return '<form method="get" action="/login"><input type="text" name="username" />' \
-           '<buttom type="submit">Submit</button></form>'
+@app.route('/question/<question_id>', methods=['GET'])
+def get_question(question_id):
+    lines = [data.solution[i].lstrip() for i in data.scramble_order]
+    return render_template('question.html', id=data.id, question=data.question, lines=lines)
 
-@app.route('/question', methods=['GET'])
-def get_question():
-    # For now the return data is hardcoded
-    temp = [{'topic': 'For Loops'},
-            {'lines': ['for w in words', 'print(w)']}]
-    response = jsonify(result=temp)
-    return response
+@app.route('/question/<question_id>', methods=['POST'])
+def answer_question(question_id):
+    req_ans = request.form['answer']
+    if not answer_regex.match(req_ans):
+        return 'Wrong'
 
-
-@app.route('/question', methods=['POST'])
-def post_question():
-    fields = ['topic', 'lines']
-    parsed_data = request.get_json(silent=True)
-
-    if logic.isFieldsExist(parsed_data, fields):
-        question_topic = parsed_data.get('topic')
-        code_lines = parsed_data.get('lines').split(',')
-        new_question = Question(topic=question_topic, lines=code_lines).save()
-        return jsonify(result=str(new_question.id))
-    else:
-        abort(422)
+    ans = [int(i) for i in req_ans.split(',')]
+    return 'Correct' if ans == data.scramble_order else 'Wrong'
 
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 8000))
-    app.debug = True
     app.run(port=port)

@@ -1,7 +1,6 @@
 from collections import namedtuple
 from flask import Flask, jsonify, request, abort, render_template
 
-import model
 import os
 import sys
 import re

@@ -33,6 +33,7 @@ def answer_question(question_id):
     scramble_order = [int(i) for i in req_ans.split(',')]
     return 'Correct' if scramble_order == data.scramble_order else 'Wrong'
 
+@app.route('/drag')
 def drag():
     return render_template('drag.html')
 

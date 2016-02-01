@@ -22,7 +22,7 @@ def get_questions():
 @app.route('/question/<question_id>', methods=['GET'])
 def get_question(question_id):
     lines = [data.solution[i].lstrip() for i in data.scramble_order]
-    return render_template('question.html', id=data.id, question=data.question, lines=lines)
+    return render_template('question.html', id=data.id, question=data.question, lines=lines, line_count=list(range(len(lines))) )
 
 @app.route('/question/<question_id>', methods=['POST'])
 def answer_question(question_id):
@@ -32,11 +32,6 @@ def answer_question(question_id):
 
     scramble_order = [int(i) for i in req_ans.split(',')]
     return 'Correct' if scramble_order == data.scramble_order else 'Wrong'
-
-@app.route('/drag')
-def drag():
-    return render_template('drag.html')
-
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 8000))

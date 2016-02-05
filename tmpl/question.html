@@ -2,17 +2,15 @@
 
 {% block content %}
 <h4>{{question}}</h4>
-<div id="dragdiv" class="lines">
-    <ul id="allItems">
-        {% for line in lines %}
-        <div class="code">
-            <li>{{'%02d' | format(loop.index)}} | {{line}}</li>
-        </div>
-        {% endfor%}
-        <input id="answerText" input="text"/>
-        <button id="answerQuestion" value="{{id}}">Submit</button>
-    </ul>
-</div>
 
-
+<ul id="lines">
+    <br/>
+    {% for line in lines %}
+        <li class="code">{{line}}</li>
+    {% endfor %}
+    <br/>
+</ul>
+<input id="answerText" input="text"/>
+<button id="answerQuestion" value="{{id}}">Submit</button>
+<div id="result"></div>
 {% endblock %}

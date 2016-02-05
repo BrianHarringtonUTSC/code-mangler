@@ -2,7 +2,7 @@ from collections import namedtuple
 from flask import Flask, jsonify, request, abort, render_template
 
 import os
-import sys
+import json
 import re
 
 app = Flask(__name__, static_url_path='', template_folder='tmpl/')
@@ -27,12 +27,9 @@ def get_question(question_id):
 
 @app.route('/question/<question_id>', methods=['POST'])
 def answer_question(question_id):
-    req_ans = request.form['answer']
-    if not answer_regex.match(req_ans):
-        return ('Invalid', 400)
+    ans = json.loads(request.form.get('answer', []))
+    return 'Correct' if ans == data.scramble_order else 'Try Again'
 
-    scramble_order = [int(i) for i in req_ans.split(',')]
-    return 'Correct' if scramble_order == data.scramble_order else 'Wrong'
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 8000))

@@ -6,11 +6,11 @@
 <ul id="lines">
     <br/>
     {% for line in lines %}
-        <li class="code">{{line}}</li>
+        <li lineNum={{loop.index0}} class="code">{{line}}</li>
     {% endfor %}
     <br/>
 </ul>
-<input id="answerText" input="text"/>
 <button id="answerQuestion" value="{{id}}">Submit</button>
+
 <div id="result"></div>
 {% endblock %}

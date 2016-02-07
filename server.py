@@ -27,12 +27,10 @@ def get_question(question_id):
 
 @app.route('/question/<question_id>', methods=['POST'])
 def answer_question(question_id):
-    ans = json.loads(str(request.form.get('answer', [])))
-    print(ans)
-    return 'Correct' if ans == data.scramble_order else 'Incorrect'
+    ans = json.loads(request.form.get('answer', []))
+    return 'Correct' if ans == data.scramble_order else 'Try Again'
 
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 8000))
-    app.debug = True
     app.run(port=port)

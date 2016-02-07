@@ -27,7 +27,7 @@ def get_question(question_id):
 
 @app.route('/question/<question_id>', methods=['POST'])
 def answer_question(question_id):
-    ans = json.loads(request.form.get('answerLine', []))
+    ans = json.loads(request.form.get('answer', '[]'))
     return 'Correct' if ans == data.scramble_order else 'Try Again'
 
 

@@ -71,7 +71,7 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 60%;
+    width: 90%;
 }
 
 #lines li {
@@ -81,4 +81,21 @@ ul {
 
 #lines li:hover {
     cursor: default;
+}
+
+#bloc1, #bloc2, #bloc3
+{
+    display:inline-block;
+}
+
+#bloc2
+{
+    width: 60%;
+}
+
+.rewind, .ffwd
+{
+    background-color: dodgerblue;
+    color: white;
+    border-radius: 90%;
 }

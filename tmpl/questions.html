@@ -2,8 +2,8 @@
 
 {% block content %}
 	<ul class="questions">
-		{% for question in questions %}
-			<li class="question"><a href="/question/{{question.id}}">{{question.question}}</a></li>
+		{% for key in questions %}
+			<li class="question"><a href="/question/{{key['id']}}">{{key['question']}}</a></li>
 		{% endfor %}
 	</ul>
 {% endblock %}

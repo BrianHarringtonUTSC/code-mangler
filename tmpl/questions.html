@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 	<ul class="questions">
+        <h2>Welcome {{name}}</h2>
+        <hr>
 		{% for key in questions %}
-			<li class="question"><a href="/question/{{key['id']}}">{{key['question']}}</a></li>
+			<a href="/question/{{key['id']}}"><div class="question"><p>{{key['question']}}</p></div></a>
+        <hr>
 		{% endfor %}
+        <p><a href="/logout">Click Here to Logout</a></p>
 	</ul>
+
 {% endblock %}

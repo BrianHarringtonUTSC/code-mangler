@@ -1,5 +1,30 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="UTF-8">
+	<title>Code Mangler Login</title>
+	<link rel="stylesheet" href="/css/login.css">
+	<script src="/js/prefixfree.min.js"></script>
+</head>
 
-{% block content %}
+<body>
 
-{% endblock %}
+<div class="login">
+	<h1>Code Mangler</h1>
+	<h2>Login</h2>
+	<form method="post">
+		<input type="text" name="u" placeholder="UTORID" required="required" />
+		<input type="password" name="p" placeholder="PASSWORD" required="required" />
+		<button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
+	</form>
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{ error }}</p>
+	{% endif %}
+</div>
+<script src="/login.js"></script>
+
+
+
+
+</body>
+</html>

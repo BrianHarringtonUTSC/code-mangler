@@ -2,7 +2,6 @@ import os
 import json
 import sys
 import bson
-import re
 
 from flask import Flask, request, render_template, url_for, redirect, session
 from pymongo import MongoClient
@@ -19,15 +18,21 @@ db = client.code_mangler
 INDENTATION_AMOUNT = 4
 
 def get_session_user():
-    return db.accounts.find_one({"_id": ObjectId(session['user_id'])})
+    if 'logged_in' in session and 'user_id' in session:
+        return db.accounts.find_one({"_id": ObjectId(session['user_id'])})
 
 def get_question_from_id(question_id):
-    return db.questions.find_one({"_id": question_id})
+    try:
+        qid = ObjectId(question_id)
+    except bson.errors.InvalidId as e:
+        return None
+
+    return db.questions.find_one({"_id": qid})
 
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if 'user_id' in session:
+        if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
             return redirect(url_for('get_login'))
@@ -46,6 +51,7 @@ def login_user():
 
     if user:
         session['user_id'] = str(user['_id'])
+        session['logged_in'] = True
         return redirect(url_for('get_questions'))
 
     return render_template('login.html', error='Invalid credentials. Please try again!')
@@ -54,6 +60,7 @@ def login_user():
 @login_required
 def logout():
     session.pop('user_id', None)
+    session.pop('logged_in', None)
     return redirect(url_for('get_login'))
 
 @app.route('/')
@@ -66,13 +73,7 @@ def get_questions():
 @app.route('/question/<question_id>', methods=['GET'])
 @login_required
 def get_question(question_id):
-    try:
-        question_id = ObjectId(question_id)
-    except bson.errors.InvalidId as e:
-        return 'Invalid Question ID', 400
-
     question = get_question_from_id(question_id)
-
     if not question:
         return 'Question not found', 404
 
@@ -87,16 +88,13 @@ def get_question(question_id):
 @app.route('/question/<question_id>', methods=['POST'])
 @login_required
 def answer_question(question_id):
-    try:
-        qid = ObjectId(question_id)
-    except bson.errors.InvalidId as e:
-        return 'Invalid Question ID', 400
+    question = get_question_from_id(question_id)
+    if not question:
+        return 'Question not found', 404
+
 
     given_order = json.loads(request.form.get('order', '[]'))
     given_indentation = json.loads(request.form.get('indentation', '[]'))
-
-    question = get_question_from_id(qid)
-
     correct_indentation = [(len(line) - len(line.lstrip()))/INDENTATION_AMOUNT for line in question['solution']]
 
     if given_order == question['scramble_order'] and given_indentation == correct_indentation:

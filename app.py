@@ -2,6 +2,7 @@ import os
 import json
 import sys
 import bson
+import re
 
 from flask import Flask, request, render_template, url_for, redirect, session
 from pymongo import MongoClient
@@ -14,6 +15,8 @@ app.secret_key = "my precious"
 DB_URI = 'mongodb://tanjid:pwd123@ds059375.mongolab.com:59375/code_mangler'
 client = MongoClient(DB_URI)
 db = client.code_mangler
+
+INDENTATION_AMOUNT = 4
 
 def get_session_user():
     return db.accounts.find_one({"_id": ObjectId(session['user_id'])})
@@ -90,10 +93,11 @@ def answer_question(question_id):
         return 'Invalid Question ID', 400
 
     given_order = json.loads(request.form.get('order', '[]'))
-    given_indentation = json.loads(request.form.get('indentation', '[]')).
+    given_indentation = json.loads(request.form.get('indentation', '[]'))
 
     question = get_question_from_id(qid)
-    correct_indentation = [line.count('\t') for line in question['solution']]
+
+    correct_indentation = [(len(line) - len(line.lstrip()))/INDENTATION_AMOUNT for line in question['solution']]
 
     if given_order == question['scramble_order'] and given_indentation == correct_indentation:
         return 'Correct'

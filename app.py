@@ -8,7 +8,7 @@ from pymongo import MongoClient
 from functools import wraps
 from bson import ObjectId
 
-app = Flask(__name__, static_url_path='', template_folder='tmpl/')
+app = Flask(__name__, static_url_path='')
 app.secret_key = "my precious"
 
 DB_URI = 'mongodb://tanjid:pwd123@ds059375.mongolab.com:59375/code_mangler'
@@ -27,7 +27,6 @@ def login_required(f):
         if 'user_id' in session:
             return f(*args, **kwargs)
         else:
-            flash('You need to login first.')
             return redirect(url_for('get_login'))
     return wrap
 
@@ -90,9 +89,16 @@ def answer_question(question_id):
     except bson.errors.InvalidId as e:
         return 'Invalid Question ID', 400
 
+    given_order = json.loads(request.form.get('order', '[]'))
+    given_indentation = json.loads(request.form.get('indentation', '[]')).
+
     question = get_question_from_id(qid)
-    ans = json.loads(request.form.get('answer', '[]'))
-    return 'Correct' if ans == question['scramble_order'] else 'Try Again'
+    correct_indentation = [line.count('\t') for line in question['solution']]
+
+    if given_order == question['scramble_order'] and given_indentation == correct_indentation:
+        return 'Correct'
+    else:
+        return 'Try Again'
 
 
 if __name__ == '__main__':

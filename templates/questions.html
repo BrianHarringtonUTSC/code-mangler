@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 	<ul class="questions">
         <h2>Welcome {{name}}</h2>
         <hr>
@@ -9,7 +8,5 @@
 			<a href="/question/{{question['_id']}}"><div class="question"><p>{{question['question']}}</p></div></a>
         <hr>
 		{% endfor %}
-        <p><a href="/logout">Click Here to Logout</a></p>
 	</ul>
-
 {% endblock %}

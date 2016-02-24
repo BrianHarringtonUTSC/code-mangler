@@ -215,6 +215,13 @@ ul {
     height: 20px;
 }
 
+.code {
+    display: inline-block;
+    float: left;
+    width: 80%;
+}
+
+
 #lines li:hover {
     cursor: default;
 }
@@ -235,5 +242,6 @@ ul {
     color: white;
     border-radius: 90%;
 }
+
 
 

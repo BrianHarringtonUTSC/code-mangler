@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h4>{{question['question']}}</h4>
+<br/>
+Input: {{question['input_description']}}
+<br/>
+Output: {{question['output_description']}}
+
+<ul id="lines">
+    <br/>
+    {% for line in lines %}
+    	<div class="line" line-num={{loop.index0}}>
+	        <img class="arrow left-arrow" src="/img/left_arrow.svg" alt="Remove indentation">
+	        <img class="arrow right-arrow" src="/img/right_arrow.svg" alt="Add indentation">
+	        <li class="code"><span class="text">{{line}}</div></li>
+	    </div>
+    {% endfor %}
+    <br/>
+</ul>
+<button id="answer-question" value="{{question['_id']}}" class="btn btn-primary btn-large">Submit</button>
+
+<div id="result"></div>
+{% endblock %}

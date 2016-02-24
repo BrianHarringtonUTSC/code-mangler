@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h4>{{question}}</h4>
-<p>{{description}}</p>
-
+<h4>{{question['question']}}</h4>
+<br/>
+Input: {{question['input_description']}}
+<br/>
+Output: {{question['output_description']}}
 
 <ul id="lines">
     <br/>
@@ -12,7 +14,7 @@
     {% endfor %}
     <br/>
 </ul>
-<button id="answerQuestion" value="{{id}}" class="btn btn-primary btn-block btn-large">Submit</button>
+<button id="answerQuestion" value="{{question['_id']}}" class="btn btn-primary btn-block btn-large">Submit</button>
 
 <div id="result"></div>
 

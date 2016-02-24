@@ -5,8 +5,8 @@
 	<ul class="questions">
         <h2>Welcome {{name}}</h2>
         <hr>
-		{% for key in questions %}
-			<a href="/question/{{key['id']}}"><div class="question"><p>{{key['question']}}</p></div></a>
+		{% for question in questions %}
+			<a href="/question/{{question['_id']}}"><div class="question"><p>{{question['question']}}</p></div></a>
         <hr>
 		{% endfor %}
         <p><a href="/logout">Click Here to Logout</a></p>

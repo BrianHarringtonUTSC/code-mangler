@@ -14,9 +14,15 @@
 
     <body>
         <header>
-            <h3><a id="main-title-link" href="/">Code Mangler</a></h3>
+            <div class="block1">
+                <h3><a style="float:left" id="main-title-link" href="/">Code Mangler</a></h3>
+                <div class="block2" style="float:right">
+                    <a id="logout" style="float:left; clear:left" href="/logout">Logout</a>
+                </div>
+
+            </div>
         </header>
-        <hr>
+
 
         <main class="container-fluid">
             {% block content %}

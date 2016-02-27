@@ -17,7 +17,7 @@ db = client.code_mangler
 
 INDENTATION_AMOUNT = 4
 
-path = '/home/leoumair/'
+path = '/home/leoumair/code_mangler'
 if path not in sys.path:
    sys.path.append(path)
 

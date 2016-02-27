@@ -17,11 +17,6 @@ db = client.code_mangler
 
 INDENTATION_AMOUNT = 4
 
-path = '/home/leoumair/code_mangler'
-if path not in sys.path:
-   sys.path.append(path)
-
-
 def get_session_user():
     if 'logged_in' in session and 'user_id' in session:
         return db.accounts.find_one({"_id": ObjectId(session['user_id'])})
@@ -84,6 +79,7 @@ def get_question(question_id):
 
     solution = question['solution']
     scramble_order = question['scramble_order']
+
     return render_template(
         'question.html',
         question=question,
@@ -102,10 +98,12 @@ def answer_question(question_id):
     given_indentation = json.loads(request.form.get('indentation', '[]'))
     correct_indentation = [int(len(line) - len(line.lstrip()))/INDENTATION_AMOUNT for line in question['solution']]
 
-    print(given_order, question['scramble_order'], file=sys.stderr)
-    print(given_indentation, correct_indentation, file=sys.stderr)
+    for i, num in enumerate(given_order):
+        if question['scramble_order'][num] != i:
+            return 'Try again'
 
-    if given_order == question['scramble_order'] and given_indentation == correct_indentation:
+
+    if given_indentation == correct_indentation:
         return 'Correct'
     else:
         return 'Try Again'

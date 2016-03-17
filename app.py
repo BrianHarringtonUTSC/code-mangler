@@ -2,6 +2,8 @@ import os
 import json
 import sys
 import bson
+import unittest
+import signal
 
 from flask import Flask, request, render_template, url_for, redirect, session
 from pymongo import MongoClient
@@ -80,11 +82,19 @@ def get_question(question_id):
     solution = question['solution']
     scramble_order = question['scramble_order']
 
-    return render_template(
-        'question.html',
-        question=question,
-        lines=[solution[i].lstrip() for i in scramble_order]
-    )
+    return render_template('question.html', question=question, lines=[solution[i].lstrip() for i in scramble_order])
+
+
+
+class TestCase(unittest.TestCase):
+    def __init__(self, f, args, output):
+        super(TestCase, self).__init__()
+        self.f = f
+        self.args = args
+        self.output = output
+
+    def runTest(self):
+        self.assertEqual(self.f(*self.args), self.output)
 
 @app.route('/question/<question_id>', methods=['POST'])
 @login_required
@@ -98,19 +108,41 @@ def answer_question(question_id):
     given_indentation = json.loads(request.form.get('indentation', '[]'))
     correct_indentation = [int(len(line) - len(line.lstrip()))/INDENTATION_AMOUNT for line in question['solution']]
 
-    for i, num in enumerate(given_order):
-        if question['scramble_order'][num] != i:
-            return 'Try again'
 
+    order_correct = all([question['scramble_order'][val] == i for i, val in enumerate(given_order)])
+    indentation_correct = given_indentation == correct_indentation
 
-    if given_indentation == correct_indentation:
+    if order_correct and indentation_correct:
         return 'Correct'
-    else:
-        return 'Try Again'
+
+
+
+    lines = [question['solution'][i].strip() for i in question['scramble_order']]
+
+    code = ''
+    for i, val in enumerate(given_order):
+        code += ' ' * given_indentation[i] * 4 + lines[val] + "\n"
+
+    locals_dict = locals()
+    try:
+        if not code.startswith('def answer('):
+            raise Exception()
+
+        exec(code, globals(), locals_dict)
+    except Exception:
+        return 'Try again'
+
+    suite = unittest.TestSuite()
+    test_cases = question['test_cases']
+    for test_case in test_cases:
+        suite.addTest(TestCase(locals_dict['answer'], test_case['args'], test_case['output']))
+
+    res = unittest.TextTestRunner().run(suite)
+
+    return 'Try again' if len(res.failures) or len(res.errors) else 'Correct'
 
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 8000))
     app.debug = True
-    #app.run(port=port)
-    app.run(host=os.getenv("IP", "0.0.0.0"),port=int(os.getenv("PORT", 8080)))
+    app.run(host=os.getenv("IP", "0.0.0.0"), port=port)

@@ -1,36 +1,11 @@
-import os
 import json
-
-import bson
 import unittest
-
-from flask import Flask, request, render_template, url_for, redirect, session
-from pymongo import MongoClient
 from functools import wraps
-from bson import ObjectId
-
-app = Flask(__name__, static_url_path='')
-app.secret_key = "my precious"
-
-DB_URI = 'mongodb://tanjid:pwd123@ds059375.mongolab.com:59375/code_mangler'
-client = MongoClient(DB_URI)
-db = client.code_mangler
+from bson import ObjectId, errors
+from flask import request, render_template, url_for, redirect, session
+from codemangler import app, db
 
 INDENTATION_AMOUNT = 4
-
-
-def get_session_user():
-    if 'logged_in' in session and 'user_id' in session:
-        return db.accounts.find_one({"_id": ObjectId(session['user_id'])})
-
-
-def get_question_from_id(question_id):
-    try:
-        qid = ObjectId(question_id)
-    except bson.errors.InvalidId as e:
-        return None
-
-    return db.questions.find_one({"_id": qid})
 
 
 def login_required(f):
@@ -97,17 +72,6 @@ def get_question(question_id):
     return render_template('question.html', question=question, lines=[solution[i].lstrip() for i in scramble_order])
 
 
-class TestCase(unittest.TestCase):
-    def __init__(self, f, args, output):
-        super(TestCase, self).__init__()
-        self.f = f
-        self.args = args
-        self.output = output
-
-    def runTest(self):
-        self.assertEqual(self.f(*self.args), self.output)
-
-
 @app.route('/question/<question_id>', methods=['POST'])
 @login_required
 def answer_question(question_id):
@@ -150,8 +114,26 @@ def answer_question(question_id):
     return 'Try again' if len(res.failures) or len(res.errors) else 'Correct'
 
 
-if __name__ == '__main__':
-    port = int(os.getenv('PORT', 8000))
-    app.debug = True
-    app.run(port=port)
-    # app.run(host=os.getenv("IP", "0.0.0.0"),port=int(os.getenv("PORT", 8080)))
+def get_session_user():
+    if 'logged_in' in session and 'user_id' in session:
+        return db.accounts.find_one({"_id": ObjectId(session['user_id'])})
+
+
+def get_question_from_id(question_id):
+    try:
+        qid = ObjectId(question_id)
+    except errors.InvalidId as e:
+        return None
+
+    return db.questions.find_one({"_id": qid})
+
+
+class TestCase(unittest.TestCase):
+    def __init__(self, f, args, output):
+        super(TestCase, self).__init__()
+        self.f = f
+        self.args = args
+        self.output = output
+
+    def runTest(self):
+        self.assertEqual(self.f(*self.args), self.output)

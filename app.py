@@ -49,6 +49,11 @@ def get_login():
     return render_template('login.html')
 
 
+@app.route('/signup', methods=['GET'])
+def get_register():
+    return render_template('signup.html')
+
+
 @app.route('/login', methods=['POST'])
 def login_user():
     username = request.form["username"]

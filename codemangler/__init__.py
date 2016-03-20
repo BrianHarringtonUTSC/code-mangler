@@ -1,12 +1,10 @@
 from flask import Flask
-from pymongo import MongoClient
-
+from config import MongoConfig, Config
+from flask.ext.bcrypt import Bcrypt
 
 app = Flask(__name__, static_url_path='')
-app.secret_key = "my precious"
-
-DB_URI = 'mongodb://tanjid:pwd123@ds059375.mlab.com:59375/code_mangler'
-client = MongoClient(DB_URI)
-db = client.code_mangler
+bcrypt = Bcrypt(app)
+app.secret_key = Config.SECRET_KEY
+db = MongoConfig.db
 
 from codemangler import views

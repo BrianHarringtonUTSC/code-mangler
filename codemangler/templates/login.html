@@ -57,6 +57,9 @@
                         		<div class="form-top-left">
                         			<h3>Login for Code Mangler</h3>
                             		<p>Enter your username and password:</p>
+                                    {% if error %}
+                                        <p id="error"><strong>Error:</strong> {{ error }} </p>
+                                    {% endif %}
                         		</div>
                         		<div class="form-top-right">
                         			<i class="fa fa-key"></i>

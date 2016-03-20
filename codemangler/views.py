@@ -3,7 +3,9 @@ import unittest
 from functools import wraps
 from bson import ObjectId, errors
 from flask import request, render_template, url_for, redirect, session
-from codemangler import app, db
+from codemangler import app, db, bcrypt
+from codemangler.user import User, Get, Create
+from config import MongoConfig
 
 INDENTATION_AMOUNT = 4
 
@@ -21,6 +23,13 @@ def login_required(f):
 
 @app.route('/login', methods=['GET'])
 def get_login():
+    # user = User(
+    #     "dev",
+    #     "pwd123",
+    #     "Luke",
+    #     "Cage",
+    #     "luke.cage@utsc.utoronto.ca")
+    # Create(user).populate()
     return render_template('login.html')
 
 
@@ -32,21 +41,21 @@ def get_register():
 @app.route('/login', methods=['POST'])
 def login_user():
     username = request.form["username"]
-    password = request.form["password"]
-    user = db.accounts.find_one({'username': username, 'password': password})
-
-    if user:
-        session['user_id'] = str(user['_id'])
-        session['logged_in'] = True
-        return redirect(url_for('get_questions'))
-
-    return render_template('login.html', error='Invalid credentials. Please try again!')
+    if MongoConfig.user.find_one({'username': username}):
+        user = Get(username).get()
+        if bcrypt.check_password_hash(user.password, request.form["password"]):
+            session['username'] = user.username
+            session['logged_in'] = True
+            return redirect(url_for('get_questions'))
+        else:
+            return render_template('login.html', error='Incorrect password!')
+    return render_template('login.html', error='Username not found!')
 
 
 @app.route('/logout')
 @login_required
 def logout():
-    session.pop('user_id', None)
+    session.pop('username', None)
     session.pop('logged_in', None)
     return redirect(url_for('get_login'))
 
@@ -54,9 +63,10 @@ def logout():
 @app.route('/')
 @login_required
 def get_questions():
-    user = get_session_user()
+    if 'logged_in' in session and 'username' in session:
+        user = Get(session['username']).get()
     questions = db.questions.find()
-    return render_template('questions.html', questions=questions, name=user["fname"] + " " + user["lname"])
+    return render_template('questions.html', questions=questions, name=user.first_name + " " + user.last_name)
 
 
 @app.route('/question/<question_id>', methods=['GET'])
@@ -112,11 +122,6 @@ def answer_question(question_id):
     res = unittest.TextTestRunner().run(suite)
 
     return 'Try again' if len(res.failures) or len(res.errors) else 'Correct'
-
-
-def get_session_user():
-    if 'logged_in' in session and 'user_id' in session:
-        return db.accounts.find_one({"_id": ObjectId(session['user_id'])})
 
 
 def get_question_from_id(question_id):

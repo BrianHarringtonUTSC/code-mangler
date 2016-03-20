@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- set charset to interpret file contents -->
-        <meta charset="UTF-8">
+<head>
+    <!-- set charset to interpret file contents -->
+    <meta charset="UTF-8">
 
-        <!-- title displayed when browser tab is moused over -->
-        <title>Code Mangler</title>
+    <!-- title displayed when browser tab is moused over -->
+    <title>Code Mangler</title>
 
-        <!-- CSS definitions -->
-        <link href="/css/base.css" rel="stylesheet">
+    <!-- CSS definitions -->
+    <link href="/css/base.css" rel="stylesheet">
 
-    </head>
+</head>
 
-    <body>
-    <div id="header">
-        <header>
-            <div class="block1">
-                <h3><a style="float:left" id="main-title-link" href="/">Code Mangler</a></h3>
-                <div class="block2" style="float:right">
-                    <a id="logout" style="float:left; clear:left" href="/logout">Logout</a>
-                </div>
-
+<body>
+<div id="header">
+    <header>
+        <div class="block1">
+            <h3><a style="float:left" id="main-title-link" href="/">Code Mangler</a></h3>
+            <div class="block2" style="float:right">
+                <a id="logout" style="float:left; clear:left" href="/logout">Logout</a>
             </div>
-        </header>
-    </div>
 
-        <main class="container-fluid">
-            {% block content %}
-            {% endblock %}
-        </main>  <!-- container-fluid -->
+        </div>
+    </header>
+</div>
 
-        <!-- external JS libs -->
-        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<main class="container-fluid">
+    {% block content %}
+    {% endblock %}
+</main>  <!-- container-fluid -->
+
+<!-- external JS libs -->
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 
-        <!-- internal JS libs -->
-        <script type="text/javascript" src="/js/question.js"></script>
-    </body>
+<!-- internal JS libs -->
+<script type="text/javascript" src="/js/question.js"></script>
+</body>
 </html>

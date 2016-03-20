@@ -1,5 +1,6 @@
 from datetime import datetime
-from codemangler import app, bcrypt
+
+from codemangler import bcrypt
 from config import MongoConfig
 
 

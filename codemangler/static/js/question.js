@@ -1,6 +1,6 @@
 const INDENTATION_AMOUNT = 40; // in px
 
-$(function() {
+$(function () {
     $('#answer-question').click(sendAnswer);
     $('.right-arrow').click(addIndentation);
     $('.left-arrow').click(removeIndentation);
@@ -10,7 +10,7 @@ $(function() {
 
 function getLineOrder() {
     var lineOrder = [];
-    $('.line').each( function(index, line) {
+    $('.line').each(function (index, line) {
         var lineNum = $(line).attr('line-num');
         lineOrder.push(parseInt(lineNum));
     });
@@ -19,9 +19,9 @@ function getLineOrder() {
 
 function getIndentations() {
     var indentations = [];
-     $('.text').each( function(index, text) {
+    $('.text').each(function (index, text) {
         var indentation = parseInt($(text).css('margin-left'));
-        indentations.push(parseInt(indentation/INDENTATION_AMOUNT));
+        indentations.push(parseInt(indentation / INDENTATION_AMOUNT));
     });
     return indentations;
 }
@@ -31,7 +31,7 @@ function sendAnswer(e) {
         url: '/question/' + e.target.value,
         type: 'POST',
         data: {'order': JSON.stringify(getLineOrder()), 'indentation': JSON.stringify(getIndentations())},
-        success: function(response) {
+        success: function (response) {
             $('#result').html(response);
         },
     });

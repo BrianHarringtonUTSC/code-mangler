@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<br>
-<h2>Welcome {{name}}</h2>
-<h4>For Loops</h4>
+    <br>
+    <h2>Welcome {{ name }}</h2>
+    <h4>For Loops</h4>
     <ul class="questions">
 
         <hr>
-		{% for question in questions %}
-			<a href="/question/{{question['_id']}}"><div class="question"><p>{{question['question']}}</p></div></a>
-        <hr>
-		{% endfor %}
-	</ul>
+        {% for question in questions %}
+            <a href="/question/{{ question['_id'] }}">
+                <div class="question"><p>{{ question['question'] }}</p></div>
+            </a>
+            <hr>
+        {% endfor %}
+    </ul>
 {% endblock %}

@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
 .btn {
     display: inline-block;
     *display: inline;
@@ -112,13 +113,14 @@ body {
 title {
     color: #fff
 }
-.container-fluid, a#main-title-link{
+
+.container-fluid, a#main-title-link {
     color: #fff;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     letter-spacing: 1px;
 }
 
-.container-fluid{
+.container-fluid {
     height: 100%;
     background: dimgray;
     padding-left: 30px;
@@ -128,6 +130,7 @@ title {
     color: white;
     text-decoration: none;
 }
+
 a {
     color: #4183c4;
     text-decoration: none;
@@ -194,16 +197,14 @@ ul {
     color: #092756;
 }
 
-header{
+header {
     display: table;
     width: 75%;
     margin: 0 auto;
     padding-left: 30px;
 }
 
-
-.container-fluid, #main-title-link
-{
+.container-fluid, #main-title-link {
     display: table;
     width: 75%;
     margin: 0 auto;
@@ -220,23 +221,19 @@ header{
     width: 80%;
 }
 
-
 #lines li:hover {
     cursor: default;
 }
 
-#bloc1, #bloc2, #bloc3
-{
-    display:inline-block;
+#bloc1, #bloc2, #bloc3 {
+    display: inline-block;
 }
 
-#bloc2
-{
+#bloc2 {
     width: 60%;
 }
 
-.rewind, .ffwd
-{
+.rewind, .ffwd {
     background-color: dodgerblue;
     color: white;
     border-radius: 90%;

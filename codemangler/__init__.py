@@ -1,6 +1,7 @@
 from flask import Flask
-from config import MongoConfig, Config
 from flask.ext.bcrypt import Bcrypt
+
+from config import MongoConfig, Config
 
 app = Flask(__name__, static_url_path='')
 bcrypt = Bcrypt(app)

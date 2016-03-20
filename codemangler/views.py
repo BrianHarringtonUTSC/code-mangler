@@ -1,10 +1,12 @@
 import json
 import unittest
 from functools import wraps
+
 from bson import ObjectId, errors
 from flask import request, render_template, url_for, redirect, session
+
 from codemangler import app, db, bcrypt
-from codemangler.user import User, Get, Create
+from codemangler.user import Get
 from config import MongoConfig
 
 INDENTATION_AMOUNT = 4

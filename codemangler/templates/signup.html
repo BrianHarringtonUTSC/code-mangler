@@ -106,15 +106,23 @@
                             </div>
                             <div class="form-bottom">
                                 <div class="form-group">
+                                    <label class="sr-only" for="form-username">Username</label>
+                                    <input type="text" name="username" placeholder="Username..."
+                                           class="form-username form-control" id="form-username">
+                                </div>
+                                <div class="form-group">
                                     <label class="sr-only" for="form-first-name">First name</label>
-                                    <input type="text" name="form-first-name" placeholder="First name..."
+                                    <input type="text" name="first-name" placeholder="First name..."
                                            class="form-first-name form-control" id="form-first-name">
                                 </div>
                                 <div class="form-group">
                                     <label class="sr-only" for="form-last-name">Last name</label>
-                                    <input type="text" name="form-last-name" placeholder="Last name..."
+                                    <input type="text" name="last-name" placeholder="Last name..."
                                            class="form-last-name form-control" id="form-last-name">
                                 </div>
+                                {% if error %}
+                                    <p id="error-red"><strong>Error: </strong>{{ error }}</p>
+                                {% endif %}
                                 <button type="button" class="btn btn-next">Next</button>
                             </div>
                         </fieldset>
@@ -132,26 +140,26 @@
                             <div class="form-bottom">
                                 <div class="form-group">
                                     <label class="sr-only" for="form-email">Email</label>
-                                    <input type="text" name="form-email" placeholder="Email..."
+                                    <input type="text" name="email" placeholder="Email..."
                                            class="form-email form-control" id="form-email">
                                 </div>
                                 <div class="form-group">
                                     <label class="sr-only" for="form-password">Password</label>
-                                    <input type="password" name="form-password" placeholder="Password..."
+                                    <input type="password" name="password" placeholder="Password..."
                                            class="form-password form-control" id="form-password">
                                 </div>
                                 <div class="form-group">
                                     <label class="sr-only" for="form-repeat-password">Repeat password</label>
-                                    <input type="password" name="form-repeat-password" placeholder="Repeat password..."
+                                    <input type="password" name="repeat-password" placeholder="Repeat password..."
                                            class="form-repeat-password form-control" id="form-repeat-password">
                                 </div>
+                                <p id="error-red"></p>
+                                <p id="error-green"></p>
                                 <button type="button" class="btn btn-previous">Previous</button>
-                                <button type="submit" class="btn">Sign me up!</button>
+                                <button type="submit" class="btn" id="signup" disabled>Sign me up!</button>
                             </div>
                         </fieldset>
-
                     </form>
-
                 </div>
             </div>
             <div class="row">
@@ -182,6 +190,7 @@
 <script src="signup-assets/js/jquery.backstretch.min.js"></script>
 <script src="signup-assets/js/retina-1.1.0.min.js"></script>
 <script src="signup-assets/js/scripts.js"></script>
+<script src="signup-assets/js/signup.js"></script>
 
 <!--[if lt IE 10]>
             <script src="signup-assets/js/placeholder.js"></script>

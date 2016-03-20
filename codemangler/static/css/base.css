@@ -1,6 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 .btn {
+    font-family: 'Roboto', sans-serif;
+    color: #888;
+    font-weight: 300;
     display: inline-block;
     *display: inline;
     *zoom: 1;
@@ -8,7 +11,6 @@
     margin-bottom: 0;
     font-size: 13px;
     line-height: 18px;
-    color: #333333;
     text-align: center;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     vertical-align: middle;

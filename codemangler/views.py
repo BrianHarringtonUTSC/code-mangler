@@ -6,7 +6,7 @@ from bson import ObjectId, errors
 from flask import request, render_template, url_for, redirect, session
 
 from codemangler import app, db, bcrypt
-from codemangler.user import Get
+from codemangler.user import Get, User, Create
 from config import MongoConfig
 
 INDENTATION_AMOUNT = 4
@@ -52,6 +52,30 @@ def login_user():
         else:
             return render_template('login.html', error='Incorrect password!')
     return render_template('login.html', error='Username not found!')
+
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    username_check = MongoConfig.user.find({'username': request.form['username']}).count() > 0
+    email_check = MongoConfig.user.find({'email': request.form['email']}).count() > 0
+    if username_check and email_check:
+        return render_template('signup.html', error='Username & Email already exist!')
+    elif username_check:
+        return render_template('signup.html', error='Username already exists!')
+    elif email_check:
+        return render_template('signup.html', error='Email already exists!')
+    else:
+        user = User(
+            request.form['username'],
+            request.form['repeat-password'],
+            request.form['first-name'],
+            request.form['last-name'],
+            request.form['email']
+        )
+        Create(user).populate()
+        session['username'] = user.username
+        session['logged_in'] = True
+        return redirect(url_for('get_questions'))
 
 
 @app.route('/logout')

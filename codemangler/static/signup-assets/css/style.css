@@ -285,6 +285,19 @@ form.registration-form fieldset {
     background: #dd4b39;
 }
 
+#error-red {
+    color: darkred;
+    font-style: italic;
+}
+
+#error-green {
+    color: darkgreen;
+    font-style: italic;
+}
+
+#error-green, #error-red{
+    float: right;
+}
 /***** Media queries *****/
 
 @media (min-width: 992px) and (max-width: 1199px) {

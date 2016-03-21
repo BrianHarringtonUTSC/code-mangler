@@ -41,6 +41,20 @@ body {
     margin: 0 auto;
     padding: 0;
 }
+.col-ques{
+    padding: 10px;
+    vertical-align:top;
+    display: inline-block;
+    height:auto;
+    width: auto;
+    margin: 5px;
+    background: dimgrey;
+}
+
+.col-ques .description{
+    color: #5bc0de;
+    text-align: justify;
+}
 
 ol, ul, dl {
     margin: 0;
@@ -137,7 +151,6 @@ a {
 }
 
 .feature_sub {
-    color: #000;
     font-size: 18px;
     line-height: 25px;
     font-weight: 400;
@@ -638,9 +651,10 @@ ul.navbar-nav > .active > a {
 
 /* Portfolio Area
 =========================================== */
-#portfolio {
-    background: #FBFAF8;
-}
+/*#portfolio {*/
+    /*background: #FBFAF8;*/
+/*}*/
+
 
 #isotope-filter {
     padding: 35px 0px;
@@ -2951,11 +2965,11 @@ iframe {
 @media (min-width: 992px) {
 
     ul.navbar-nav {
-        margin-right: 10%;
+        margin-right: 12%;
     }
 
     #logo-img {
-        margin-left: 80%;
+        margin-left: 5%;
     }
 }
 

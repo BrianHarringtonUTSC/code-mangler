@@ -1,46 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- set charset to interpret file contents -->
-    <meta charset="UTF-8">
 
-    <!-- title displayed when browser tab is moused over -->
-    <title>Code Mangler</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Code Mangler - Register</title>
 
-    <!-- CSS definitions -->
-    <link href="/css/base.css" rel="stylesheet">
+    <!-- CSS -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="signup-assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="signup-assets/font-awesome/css/font-awesome.min.css">
 
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/form-elements.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/css/red.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
 </head>
 
 <body>
-<div id="header">
-    <header>
-        <div class="block1">
-            <h3><a style="float:left" id="main-title-link" href="/">Code Mangler</a></h3>
-            <div class="block2" style="float:right">
-                <a id="logout" style="float:left; clear:left" href="/logout">Logout</a>
-            </div>
-
-        </div>
-    </header>
-</div>
-
-<main class="container-fluid">
     {% block content %}
     {% endblock %}
-</main>  <!-- container-fluid -->
-
-<!-- external JS libs -->
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<script src="signup-assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="signup-assets/js/jquery.backstretch.min.js"></script>
-
-
-<!-- internal JS libs -->
-<script type="text/javascript" src="/js/question.js"></script>
 </body>
+
+
+{% include 'footer.html' %}
 </html>

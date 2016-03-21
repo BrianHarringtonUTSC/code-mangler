@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="inner-bg">
+        <div class="container">
+            <div class="row" id="question-pg">
+                <div class="col-sm-8 col-sm-offset-2 text">
+                    <h1>{{ question['question'] }}</h1>
+                    <br/>
+                    Input: {{ question['input_description'] }}
+                    <br/>
+                    Output: {{ question['output_description'] }}
+                </div>
+            </div>
+
+            <div class="row" id="code-section">
+                <div class="list-group">
+                    {% for line in lines %}
+                        <div class="code-lines">
+                            <img class="arrow left-arrow" id="left-arrow" src="/img/left_arrow.svg"
+                                 alt="Remove indentation">
+                            <a href="#" class="list-group-item" id="code-line"><span class="code-line">{{ line }}</span></a>
+                            <img class="arrow right-arrow" id="right-arrow" src="/img/right_arrow.svg"
+                                 alt="Add indentation">
+                        </div>
+                    {% endfor %}
+                </div>
+                <button id="answer-question" value="{{ question['_id'] }}" class="btn btn-primary btn-large">Submit
+                </button>
+                <div id="result"></div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

@@ -1,12 +1,31 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- set charset to interpret file contents -->
+    <meta charset="UTF-8">
 
-{% block content %}
-    <br>
+    <!-- title displayed when browser tab is moused over -->
+    <title>Code Mangler</title>
+
+    <!-- CSS definitions -->
+    <link href="/css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/form-elements.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/css/red.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+{% include 'navbar.html' %}
+<main class="container-fluid" id="main-stuff">
     <h4>{{ question['question'] }}</h4>
-    <br/>
-    Input: {{ question['input_description'] }}
-    <br/>
-    Output: {{ question['output_description'] }}
+    <p>Input: {{ question['input_description'] }}</p>
+    <p>Output: {{ question['output_description'] }}</p>
 
     <ul id="lines">
         <br/>
@@ -14,7 +33,7 @@
             <div class="line" line-num={{ loop.index0 }}>
                 <img class="arrow left-arrow" src="/img/left_arrow.svg" alt="Remove indentation">
                 <img class="arrow right-arrow" src="/img/right_arrow.svg" alt="Add indentation">
-                <li class="code"><span class="text">
+                <li class="code"><span class="text-code">
                 {{ line }}</div></li>
             </div>
         {% endfor %}
@@ -23,4 +42,18 @@
     <button id="answer-question" value="{{ question['_id'] }}" class="btn btn-primary btn-large">Submit</button>
 
     <div id="result"></div>
-{% endblock %}
+</main>  <!-- container-fluid -->
+
+<!-- external JS libs -->
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/code-script.js"></script>
+<script src="/js/jquery.backstretch.min.js"></script>
+<script src="/js/scripts-login.js"></script>
+
+
+<!-- internal JS libs -->
+<script type="text/javascript" src="/js/question.js"></script>
+</body>
+</html>

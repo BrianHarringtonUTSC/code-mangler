@@ -19,7 +19,7 @@ function getLineOrder() {
 
 function getIndentations() {
     var indentations = [];
-    $('.text').each(function (index, text) {
+    $('.text-code').each(function (index, text) {
         var indentation = parseInt($(text).css('margin-left'));
         indentations.push(parseInt(indentation / INDENTATION_AMOUNT));
     });
@@ -39,7 +39,7 @@ function sendAnswer(e) {
 
 function changeIndentation(e, value) {
     var code = $(e.target).siblings('.code')
-    var text = code.find('.text');
+    var text = code.find('.text-code');
     var maxWidth = code.width() - text.width();
     var oldIndentation = parseInt(text.css('margin-left'));
     var newIndentation = oldIndentation + value;

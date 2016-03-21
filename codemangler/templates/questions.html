@@ -1,17 +1,33 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <br>
-    <h2>Welcome {{ name }}</h2>
-    <h4>For Loops</h4>
-    <ul class="questions">
 
-        <hr>
-        {% for question in questions %}
-            <a href="/question/{{ question['_id'] }}">
-                <div class="question"><p>{{ question['question'] }}</p></div>
-            </a>
-            <hr>
-        {% endfor %}
-    </ul>
+    {% include 'navbar.html' %}
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text">
+                        <h1>Welcome <strong>{{ name }}</strong></h1>
+                        <h2>For Loops</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text">
+                        <div class="questions">
+                            {% for question in questions %}
+                                <a href="/question/{{ question['_id'] }}">
+                                    <div class="question"><p>{{ question['question'] }}</p></div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 {% endblock %}

@@ -1,5 +1,9 @@
+import imp
 import json
 import unittest
+import sys
+import tempfile
+import os
 from functools import wraps
 
 from bson import ObjectId, errors
@@ -25,13 +29,6 @@ def login_required(f):
 
 @app.route('/login', methods=['GET'])
 def get_login():
-    # user = User(
-    #     "dev",
-    #     "pwd123",
-    #     "Luke",
-    #     "Cage",
-    #     "luke.cage@utsc.utoronto.ca")
-    # Create(user).populate()
     return render_template('login.html')
 
 
@@ -116,6 +113,36 @@ def get_question(question_id):
     return render_template('question.html', question=question, lines=[solution[i].lstrip() for i in scramble_order])
 
 
+RESPONSE_SUCCESS = 'Correct'
+RESPONSE_FAILED = 'Try Again'
+
+
+def run_test_cases(question, given_order, given_indentation):
+    lines = [question['solution'][i].strip() for i in question['scramble_order']]
+
+    code = ''
+    for i, val in enumerate(given_order):
+        code += ' ' * given_indentation[i] * INDENTATION_AMOUNT + lines[val] + "\n"
+
+
+    for test_case in question['test_cases']:
+        code += "\n" + test_case
+
+    f = None
+    try:
+        with tempfile.NamedTemporaryFile(delete=False) as f:
+            f.write(bytes(code, 'UTF-8'))
+
+        imp.load_source(f.name, f.name)
+    except Exception as e:
+        print(e, file=sys.stderr)
+        return RESPONSE_FAILED
+    finally:
+        if f is not None:
+            os.remove(f.name)
+
+    return RESPONSE_SUCCESS
+
 @app.route('/question/<question_id>', methods=['POST'])
 @login_required
 def answer_question(question_id):
@@ -131,31 +158,13 @@ def answer_question(question_id):
     indentation_correct = given_indentation == correct_indentation
 
     if order_correct and indentation_correct:
-        return 'Correct'
+        return RESPONSE_SUCCESS
 
-    lines = [question['solution'][i].strip() for i in question['scramble_order']]
+    if 'test_cases' not in question:
+        return RESPONSE_FAILED
 
-    code = ''
-    for i, val in enumerate(given_order):
-        code += ' ' * given_indentation[i] * 4 + lines[val] + "\n"
 
-    locals_dict = locals()
-    try:
-        if not code.startswith('def answer('):
-            raise Exception()
-
-        exec(code, globals(), locals_dict)
-    except Exception:
-        return 'Try again'
-
-    suite = unittest.TestSuite()
-    test_cases = question['test_cases']
-    for test_case in test_cases:
-        suite.addTest(TestCase(locals_dict['answer'], test_case['args'], test_case['output']))
-
-    res = unittest.TextTestRunner().run(suite)
-
-    return 'Try again' if len(res.failures) or len(res.errors) else 'Correct'
+    return run_test_cases(question, given_order, given_indentation)
 
 
 def get_question_from_id(question_id):

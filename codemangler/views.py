@@ -95,6 +95,14 @@ def get_questions():
     return render_template('questions.html', questions=questions, name=user.first_name + " " + user.last_name)
 
 
+@app.route('/upload')
+@login_required
+def upload_page():
+    if 'logged_in' in session and 'username' in session:
+        user = Get(session['username']).get()
+    return render_template('upload.html', name=user.first_name + " " + user.last_name)
+
+
 @app.route('/question/<question_id>', methods=['GET'])
 @login_required
 def get_question(question_id):

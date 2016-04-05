@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="top-content">
+
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text">
+                        <h1><strong>Coding Problem</strong> Upload Form</h1>
+                        <div class="description">
+                            <p>
+                                Copy and paste your Python code without removing indentations.
+                                Pick all categories that applies to your problem and
+                                select your difficulty.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 form-box" id="upload-form">
+                        <div class="form-top">
+                            <div class="form-top-left">
+                                <h3>Code Upload</h3>
+                                <p>Fill in the form below to upload your code:</p>
+                            </div>
+                            <div class="form-top-right">
+                                <i class=""fa fa-cloud-upload""></i>
+                            </div>
+                        </div>
+                        <div class="form-bottom contact-form">
+                            <form role="form" action="assets/contact.php" method="post">
+                                <div class="form-group">
+                                    <label class="sr-only" for="question-title">Question Title</label>
+                                    <input type="text" name="email" placeholder="Question Title..."
+                                           class="contact-email form-control" id="contact-email">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="contact-subject">Tag</label>
+                                    <input type="text" class="contact-subject form-control" id="tag-input"
+                                       data-role="tagsinput" placeholder="Type then press enter...">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="contact-message">Message</label>
+                                    <textarea name="message" placeholder="Message..."
+                                              class="contact-message form-control" id="contact-message"></textarea>
+                                </div>
+                                <button type="submit" class="btn">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

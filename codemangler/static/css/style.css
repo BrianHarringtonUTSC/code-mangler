@@ -332,7 +332,16 @@ form.registration-form fieldset {
     float: right;
 }
 /***** Media queries *****/
-
+@media (min-width: 768px){
+#upload-form {
+    margin-left: 16.66666667%;
+}
+}
+@media (min-width: 768px){
+#upload-form  {
+    width: 66.66666667%;
+}
+}
 @media (min-width: 1200px) {
     #code-section{
         margin-left: 16.1%;

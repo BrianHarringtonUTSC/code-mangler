@@ -1,6 +1,6 @@
 import imp
 import json
-import unittest
+import subprocess
 import sys
 import tempfile
 import os
@@ -124,22 +124,19 @@ def run_test_cases(question, given_order, given_indentation):
     for i, val in enumerate(given_order):
         code += ' ' * given_indentation[i] * INDENTATION_AMOUNT + lines[val] + "\n"
 
-
     for test_case in question['test_cases']:
         code += "\n" + test_case
 
-    f = None
-    try:
-        with tempfile.NamedTemporaryFile(delete=False) as f:
-            f.write(bytes(code, 'UTF-8'))
+    with tempfile.NamedTemporaryFile(delete=False) as f:
+        f.write(bytes(code, 'UTF-8'))
 
-        imp.load_source(f.name, f.name)
+    try:
+        res = subprocess.run(["python", f.name], timeout=1) # TODO: pass in python location as an arg so you can specify
+        res.check_returncode()
     except Exception as e:
-        print(e, file=sys.stderr)
         return RESPONSE_FAILED
     finally:
-        if f is not None:
-            os.remove(f.name)
+        os.remove(f.name)
 
     return RESPONSE_SUCCESS
 
@@ -174,14 +171,3 @@ def get_question_from_id(question_id):
         return None
 
     return db.questions.find_one({"_id": qid})
-
-
-class TestCase(unittest.TestCase):
-    def __init__(self, f, args, output):
-        super(TestCase, self).__init__()
-        self.f = f
-        self.args = args
-        self.output = output
-
-    def runTest(self):
-        self.assertEqual(self.f(*self.args), self.output)

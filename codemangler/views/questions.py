@@ -72,15 +72,30 @@ def run_test_cases(question, given_order, given_indentation):
 
     try:
         # TODO: pass in python location as an arg so you can specify
-        res = subprocess.run(["python", f.name], timeout=1)
-        res.check_returncode()
+        with open(os.devnull, 'w') as devnull: # redirect output to dev null
+            res = subprocess.run(["python", f.name], stdout=devnull, stderr=devnull, timeout=1)
+            res.check_returncode()
     except Exception:
-        return RESPONSE_FAILED
+        return False
     finally:
         os.remove(f.name)
 
-    return RESPONSE_SUCCESS
+    return True
 
+def check_answer(question, given_order, given_indentation):
+
+    correct_indentation = [int(len(line) - len(line.lstrip())) / INDENTATION_AMOUNT for line in question['solution']]
+
+    order_correct = all([question['scramble_order'][val] == i for i, val in enumerate(given_order)])
+    indentation_correct = given_indentation == correct_indentation
+
+    if order_correct and indentation_correct:
+        return True
+
+    if 'test_cases' not in question:
+        return False
+
+    return run_test_cases(question, given_order, given_indentation)
 
 @app.route('/question/<question_id>', methods=['POST'])
 @login_required
@@ -91,16 +106,5 @@ def answer_question(question_id):
 
     given_order = json.loads(request.form.get('order', '[]'))
     given_indentation = json.loads(request.form.get('indentation', '[]'))
-    correct_indentation = [int(len(line) - len(line.lstrip())) / INDENTATION_AMOUNT for line in question['solution']]
 
-    order_correct = all([question['scramble_order'][val] == i for i, val in enumerate(given_order)])
-    indentation_correct = given_indentation == correct_indentation
-
-    if order_correct and indentation_correct:
-        return RESPONSE_SUCCESS
-
-    if 'test_cases' not in question:
-        return RESPONSE_FAILED
-
-
-    return run_test_cases(question, given_order, given_indentation)
+    return RESPONSE_SUCCESS if check_answer(question, given_order, given_indentation) else RESPONSE_FAILED

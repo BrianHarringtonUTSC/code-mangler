@@ -8,4 +8,4 @@ bcrypt = Bcrypt(app)
 app.secret_key = Config.SECRET_KEY
 db = MongoConfig.db
 
-from codemangler import views
+from codemangler.views import users, questions

@@ -2,57 +2,72 @@
 
 {% block content %}
     {% include 'navbar.html' %}
+    <!-- Top content -->
     <div class="top-content">
-
         <div class="inner-bg">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2 text">
-                        <h1><strong>Coding Problem</strong> Upload Form</h1>
-                        <div class="description">
-                            <p>
-                                Copy and paste your Python code without removing indentations.
-                                Pick all categories that applies to your problem and
-                                select your difficulty.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-sm-offset-3 form-box" id="upload-form">
-                        <div class="form-top">
-                            <div class="form-top-left">
-                                <h3>Code Upload</h3>
-                                <p>Fill in the form below to upload your code:</p>
+                        <div class="form-box">
+                            <div class="form-top">
+                                <div class="form-top-left">
+                                    <h3>Upload</h3>
+                                </div>
+                                <div class="form-top-right">
+                                    <i class="fa fa-pencil"></i>
+                                </div>
                             </div>
-                            <div class="form-top-right">
-                                <i class=""fa fa-cloud-upload""></i>
+                            <div class="form-bottom">
+                                <form role="form" action="" method="post" class="upload-form">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="form-question">Question</label>
+                                        <input type="text" name="form-question" placeholder="Question..."
+                                               class="form-question form-control" id="form-question">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="form-category">Category</label>
+                                        <input type="text" name="form-category" placeholder="Category..."
+                                               class="form-category form-control" id="form-category">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="form-solution">Code</label>
+				                        	<textarea name="form-solution" placeholder="Copy paste your code..."
+                                                      class="form-solution form-control"
+                                                      id="form-solution"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="form-input">Input Description</label>
+				                        	<textarea name="form-input" placeholder="Enter Input Description..."
+                                                      class="form-input form-control"
+                                                      id="form-input"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="form-output">Output Description</label>
+				                        	<textarea name="form-output" placeholder="Enter Output Description..."
+                                                      class="form-output form-control"
+                                                      id="form-output"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="form-test">Test Cases</label>
+                                        <input type="text" name="form-test" placeholder="Test Cases..."
+                                               class="form-test form-control" id="form-test">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="form-difficulty">Test Cases</label>
+                                        <input type="text" name="form-difficulty" placeholder="Difficult from 1-5..."
+                                               class="form-difficulty form-control" id="form-difficulty">
+                                    </div>
+                                    <button type="submit" class="btn">Upload</button>
+                                </form>
                             </div>
-                        </div>
-                        <div class="form-bottom contact-form">
-                            <form role="form" action="assets/contact.php" method="post">
-                                <div class="form-group">
-                                    <label class="sr-only" for="question-title">Question Title</label>
-                                    <input type="text" name="email" placeholder="Question Title..."
-                                           class="contact-email form-control" id="contact-email">
-                                </div>
-                                <div class="form-group">
-                                    <label class="sr-only" for="contact-subject">Tag</label>
-                                    <input type="text" class="contact-subject form-control" id="tag-input"
-                                       data-role="tagsinput" placeholder="Type then press enter...">
-                                </div>
-                                <div class="form-group">
-                                    <label class="sr-only" for="contact-message">Message</label>
-                                    <textarea name="message" placeholder="Message..."
-                                              class="contact-message form-control" id="contact-message"></textarea>
-                                </div>
-                                <button type="submit" class="btn">Upload</button>
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
+    </div>
 
     </div>
 {% endblock %}

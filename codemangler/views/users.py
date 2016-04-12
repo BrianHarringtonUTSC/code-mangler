@@ -1,10 +1,10 @@
 from functools import wraps
+
 from flask import request, render_template, url_for, redirect, session
 
 from codemangler import app, bcrypt
-from codemangler.models.user import Get, User, Create
+from codemangler.models.user import GetUser, User, CreateUser
 from config import MongoConfig
-
 
 
 def login_required(f):
@@ -16,6 +16,7 @@ def login_required(f):
             return redirect(url_for('get_login'))
 
     return wrap
+
 
 @app.route('/login', methods=['GET'])
 def get_login():
@@ -33,13 +34,14 @@ def login_user():
     if not MongoConfig.user.find_one({'username': username}):
         return render_template('login.html', error='Username not found!')
 
-    user = Get(username).get()
+    user = GetUser(username).get()
     if not bcrypt.check_password_hash(user.password, request.form["password"]):
         return render_template('login.html', error='Incorrect password!')
 
     session['username'] = user.username
     session['logged_in'] = True
     return redirect(url_for('get_questions'))
+
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -58,7 +60,7 @@ def signup():
             request.form['first-name'],
             request.form['last-name'],
             request.form['email'])
-        Create(user).populate()
+        CreateUser(user).populate()
         session['username'] = user.username
         session['logged_in'] = True
         return redirect(url_for('get_questions'))
@@ -70,4 +72,3 @@ def logout():
     session.pop('username', None)
     session.pop('logged_in', None)
     return redirect(url_for('get_login'))
-

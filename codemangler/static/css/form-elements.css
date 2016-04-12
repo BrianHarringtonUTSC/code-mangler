@@ -1,4 +1,9 @@
-
+#form-solution{
+    height: 500px;
+}
+#form-input, #form-output{
+    height: 100px;
+}
 input[type="text"],
 input[type="password"],
 textarea,

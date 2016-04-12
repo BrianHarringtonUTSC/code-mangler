@@ -196,7 +196,6 @@ ul.navbar-nav {
 
 .navbar-brand {
     width: 123px;
-    background: url(/img/logo.png) left center no-repeat;
     text-indent: -99999px;
 }
 
@@ -454,7 +453,6 @@ form.registration-form fieldset {
 
     /* logo */
     .navbar-brand {
-        background-image: url(../img/logo@2x.png) !important;
         background-repeat: no-repeat !important;
         background-size: 123px 49px !important;
     }

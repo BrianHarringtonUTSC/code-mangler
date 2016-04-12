@@ -4,40 +4,6 @@
     {% include 'navbar.html' %}
 
 
-
-
-
-    {#    <!-- Top content -->#}
-    {#    <div class="top-content">#}
-    {#        <div class="inner-bg">#}
-    {#            <div class="container">#}
-    {#                <div class="row">#}
-    {#                    <div class="col-sm-8 col-sm-offset-2 text">#}
-    {#                        <h1>Welcome <strong>{{ name }}</strong></h1>#}
-    {#                        <h2>For Loops</h2>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#                <div class="row">#}
-    {#                    <div class="col-sm-8 col-sm-offset-2 text">#}
-    {#                        <div class="questions">#}
-    {#                            {% for question in questions %}#}
-    {#                                <a href="/question/{{ question['_id'] }}">#}
-    {#                                    <div class="question"><p>{{ question['question'] }}</p></div>#}
-    {#                                </a>#}
-    {#                            {% endfor %}#}
-    {#                        </div>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {##}
-    {#            </div>#}
-    {##}
-    {#        </div>#}
-    {##}
-    {#    </div>#}
-
-
-    <!-- Portfolio works Start -->
-
     <section id="portfolio">
         <div class="container">
             <div class="row">
@@ -71,23 +37,22 @@
                     <li class="col-xs-12 col-sm-6 col-md-3 single-portfolio {{ question['category']|join(' ') }}">
                         <div class="col-ques">
                             <figure>
-                                {#                            <img src="img/portfolio/p1.jpg" alt="" />#}
-                                {#                            <figcaption > #}
-                                <h2>{{ question['question'] }}</h2>
+
+                                <h2>{{ question.question }}</h2>
                                 <p class="links" id="open-ques">
-                                    <a href="/question/{{ question['_id'] }}" data-rel="prettyPhoto"
+                                    <a href="/question/{{ question._id }}" data-rel="prettyPhoto"
                                        class="img-responsive">
                                         <i class="fa fa-folder-open"></i>
                                     </a>
                                 </p>
                                 <p class="description">
-                                    {{ question['output_description'] }}
+                                    {{ question.output_description }}
                                 </p>
                                 <p class="description">
                                     Categories:
-                                    {{ question['category']|join(', ') }}.
+                                    {{ question.category|join(', ') }}.
                                 </p>
-                                {#                            </figcaption>#}
+
                             </figure>
                         </div>
                     </li>

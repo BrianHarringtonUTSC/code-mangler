@@ -23,7 +23,7 @@ class User(object):
         self.level = level
 
 
-class Create:
+class CreateUser:
     def __init__(self, user):
         self.user = user
 
@@ -49,7 +49,7 @@ class Create:
         table.insert(user_data)
 
 
-class Post:
+class PostUser:
     def __init__(self, username, data):
         self.username = username
         self.data = data
@@ -64,7 +64,7 @@ class Post:
         return Get(self.username).get()
 
 
-class Get:
+class GetUser:
     def __init__(self, username):
         self.username = username
 

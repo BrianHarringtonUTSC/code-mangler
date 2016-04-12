@@ -13,4 +13,3 @@ $('#form-repeat-password').keyup(function() {
     }
 });
 
-//<strong>Error: </strong>Passwords don't match, Try Again!

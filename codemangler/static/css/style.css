@@ -12,12 +12,11 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-family: "Bitstream Vera Sans Mono", Consolas, Courier, monospace;
-    font-size: 15px;
+    font-size: 20px;
     margin: 0 2px;
     padding: 0 5px;
     display: inline-block;
     float: left;
-
 }
 
 #initial-pg {
@@ -36,12 +35,13 @@ strong {
     margin-left: 2%;
 }
 
-.list-group-item{
-    float:left;
+.list-group-item {
+    float: left;
     padding: 10px;
     width: 90%
 }
-.code-lines{
+
+.code-lines {
     padding: 10px;
 }
 
@@ -327,22 +327,25 @@ form.registration-form fieldset {
     font-style: italic;
 }
 
-#error-green, #error-red{
+#error-green, #error-red {
     float: right;
 }
+
 /***** Media queries *****/
-@media (min-width: 768px){
-#upload-form {
-    margin-left: 16.66666667%;
+@media (min-width: 768px) {
+    #upload-form {
+        margin-left: 16.66666667%;
+    }
 }
+
+@media (min-width: 768px) {
+    #upload-form {
+        width: 66.66666667%;
+    }
 }
-@media (min-width: 768px){
-#upload-form  {
-    width: 66.66666667%;
-}
-}
+
 @media (min-width: 1200px) {
-    #code-section{
+    #code-section {
         margin-left: 16.1%;
         margin-right: 10%;
     }
@@ -359,14 +362,17 @@ form.registration-form fieldset {
     #question-pg {
         margin-left: -22%
     }
-    .list-group-item{
-        float:left;
+
+    .list-group-item {
+        float: left;
         width: 85%;
     }
-    .code-lines{
+
+    .code-lines {
         padding: 5px;
     }
-    #left-arrow, #right-arrow{
+
+    #left-arrow, #right-arrow {
         min-height: 48px;
     }
 
@@ -397,7 +403,7 @@ form.registration-form fieldset {
     }
 
     .inner-bg {
-            padding: 100px 0 170px 0;
+        padding: 100px 0 170px 0;
     }
 
     .top-content .top-big-link {
@@ -415,14 +421,17 @@ form.registration-form fieldset {
     form .form-bottom button.btn {
         margin-bottom: 5px;
     }
-    .list-group-item{
-        float:left;
+
+    .list-group-item {
+        float: left;
         width: 77%;
     }
-    .code-lines{
+
+    .code-lines {
         padding: 5px;
     }
-    #left-arrow, #right-arrow{
+
+    #left-arrow, #right-arrow {
         min-height: 42px;
     }
 
@@ -434,14 +443,16 @@ form.registration-form fieldset {
         font-size: 30px;
     }
 
-    .list-group-item{
-        float:left;
+    .list-group-item {
+        float: left;
         width: 70%;
     }
-    .code-lines{
+
+    .code-lines {
         padding: 5px;
     }
-    #left-arrow, #right-arrow{
+
+    #left-arrow, #right-arrow {
         min-height: 42px;
     }
 

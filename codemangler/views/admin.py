@@ -79,12 +79,12 @@ def edit_question(question_id):
     if request.form['submit'] == 'Save':
         question = GetQuestion(ObjectId(question_id)).get()
         question.question = request.form['form-question']
-        question.category = request.form['form-category']
-        question.solution = request.form['form-solution']
+        question.category = request.form['form-category'].split(", ")
+        question.solution = request.form['form-solution'].split(", ")
         question.input_description = request.form['form-input']
         question.output_description = request.form['form-output']
-        question.test_cases = request.form['form-test']
-        question.difficulty = request.form['form-difficulty']
+        question.test_cases = request.form['form-test'].split(", ")
+        question.difficulty = int(request.form['form-difficulty'])
         UpdateQuestion(question).post()
     elif request.form['submit'] == 'Delete':
         db.questions.remove(ObjectId(question_id))

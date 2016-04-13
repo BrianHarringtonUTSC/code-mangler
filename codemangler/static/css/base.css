@@ -178,6 +178,10 @@ header {
 
 }
 
+.bottom-que{
+    color: white;
+}
+
 #lines li {
     padding-bottom: 30px;
     height: 10px;

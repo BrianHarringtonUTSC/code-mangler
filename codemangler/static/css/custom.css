@@ -49,9 +49,19 @@ body {
     height:auto;
     width: auto;
     margin: 5px;
+    color: white;
+}
+
+
+
+#new{
     background: dimgrey;
 }
 
+#completed{
+    background: darkgreen;
+
+}
 .col-ques .description{
     color: #5bc0de;
     text-align: justify;
@@ -692,6 +702,10 @@ ul.navbar-nav > .active > a {
 
 .single-portfolio figure {
     padding: 0px;
+}
+
+.question-fig{
+    vertical-align: bottom;
 }
 
 .single-portfolio img {

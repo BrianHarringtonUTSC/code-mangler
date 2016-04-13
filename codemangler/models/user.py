@@ -8,7 +8,7 @@ class User(object):
     def __init__(
             self, username, password, first_name, last_name, email,
             _id=None, user_type="regular", active=False, attempted=[],
-            completed=[], xp=0, level=0):
+            completed=[], xp=0, level=0, accountCreated=None, lastModified=None):
         self.username = username
         self.password = password
         self.first_name = first_name
@@ -21,6 +21,8 @@ class User(object):
         self.completed = completed
         self.xp = xp
         self.level = level
+        self.accountCreated = accountCreated
+        self.lastModified = lastModified
 
 
 class CreateUser:
@@ -49,19 +51,33 @@ class CreateUser:
         table.insert(user_data)
 
 
-class PostUser:
-    def __init__(self, username, data):
-        self.username = username
-        self.data = data
+class UpdateUser:
+    def __init__(self, user):
+        self.user = user
 
     def post(self):
         table = MongoConfig.user
-        self.data['lastModified'] = str(datetime.now())[:16]
+        self.user.lastModified = str(datetime.now())[:16]
+        user_data = {
+            'username': self.user.username,
+            'password': self.user.password,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+            'email': self.user.email,
+            'user_type': self.user.user_type,
+            'active': self.user.active,
+            'attempted': self.user.attempted,
+            'completed': self.user.completed,
+            'xp': self.user.xp,
+            'level': self.user.level,
+            'accountCreated': self.user.accountCreated,
+            'lastModified': self.user.lastModified
+        }
         table.update_one(
-            {'username': self.username},
-            {'$set': self.data}
+            {'username': self.user.username},
+            {'$set': user_data}
         )
-        return Get(self.username).get()
+        return GetUser(self.user.username).get()
 
 
 class GetUser:
@@ -82,4 +98,7 @@ class GetUser:
             user['attempted'],
             user['completed'],
             user['xp'],
-            user['level'])
+            user['level'],
+            user['accountCreated'],
+            user['lastModified']
+        )

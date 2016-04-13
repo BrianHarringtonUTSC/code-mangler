@@ -2,13 +2,14 @@ import json
 import os
 import subprocess
 import tempfile
+from random import shuffle
 
 from bson import ObjectId
 from flask import request, render_template, session, redirect, url_for
-from random import shuffle
+
 from codemangler import app, db
 from codemangler.models.question import GetQuestion, Question, CreateQuestion
-from codemangler.models.user import GetUser
+from codemangler.models.user import GetUser, UpdateUser
 from codemangler.views.users import login_required
 from config import MongoConfig
 
@@ -23,7 +24,7 @@ def get_questions():
     if 'logged_in' in session and 'username' in session:
         user = GetUser(session['username']).get()
     questions = db.questions.find()
-    return render_template('questions.html', questions=questions,
+    return render_template('questions.html', questions=questions, completed=user.completed,
                            name=user.first_name + " " + user.last_name)
 
 
@@ -44,7 +45,7 @@ def upload_code():
     else:
 
         solution = request.form['form-solution'].split('\r\n')
-        solution = list(filter(None,solution))
+        solution = list(filter(None, solution))
 
         scramble_order = list(range(len(solution)))
         shuffle(scramble_order)
@@ -135,5 +136,18 @@ def answer_question(question_id):
 
     given_order = json.loads(request.form.get('order', '[]'))
     given_indentation = json.loads(request.form.get('indentation', '[]'))
+    user = GetUser(session["username"]).get()
+    if ObjectId(question_id) not in user.attempted and user.completed:
+        user.attempted.append(ObjectId(question_id))
+    UpdateUser(user).post()
+    user = GetUser(session["username"]).get()
+    print(user.username, user.first_name, user.attempted, user.completed)
 
-    return RESPONSE_SUCCESS if check_answer(question, given_order, given_indentation) else RESPONSE_FAILED
+    if check_answer(question, given_order, given_indentation):
+        if ObjectId(question_id) not in user.completed:
+            user.completed.append(ObjectId(question_id))
+        user.attempted.remove(ObjectId(question_id))
+        UpdateUser(user).post()
+        return RESPONSE_SUCCESS
+    else:
+        return RESPONSE_FAILED

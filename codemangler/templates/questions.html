@@ -21,6 +21,8 @@
 
         <div id="isotope-filter" class="skew3 text-center">
             <a data-filter="*" href="#" class="active ">All</a>
+            <a data-filter=".completed" href="#" class="">Completed</a>
+            <a data-filter=".new" href="#" class="">To Do</a>
             <a data-filter=".loop" href="#" class="">Loops</a>
             <a data-filter=".conditional" href="#" class="">Decision Making</a>
             <a data-filter=".list" href="#" class="">Lists</a>
@@ -33,22 +35,23 @@
         <div id="row-ques">
             <ul class="portfolio-wrap" id="portfolio_items">
                 {% for question in questions %}
-
-                    <li class="col-xs-12 col-sm-6 col-md-3 single-portfolio {{ question['category']|join(' ') }}">
-                        <div class="col-ques">
-                            <figure>
+                    {% if question._id in completed %}
+                    {% set status = 'completed' %}
+                    {% else %}
+                    {% set status = 'new' %}
+                    {% endif %}
+                    <li class="col-xs-12 col-sm-6 col-md-3 single-portfolio {{ question['category']|join(' ') }} {{ status }}">
+                        <div class="col-ques" id="{{ status }}">
+                            <figure class="question-fig">
 
                                 <h2>{{ question.question }}</h2>
-                                <p class="links" id="open-ques">
+                                <p class="bottom-que" id="open-ques">
                                     <a href="/question/{{ question._id }}" data-rel="prettyPhoto"
                                        class="img-responsive">
                                         <i class="fa fa-folder-open"></i>
                                     </a>
                                 </p>
-                                <p class="description">
-                                    {{ question.output_description }}
-                                </p>
-                                <p class="description">
+                                <p class="bottom-que">
                                     Categories:
                                     {{ question.category|join(', ') }}.
                                 </p>

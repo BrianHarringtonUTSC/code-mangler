@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-
     {% include 'navbar.html' %}
-
-
     <section id="portfolio">
         <div class="container">
             <div class="row">
@@ -36,9 +33,9 @@
             <ul class="portfolio-wrap" id="portfolio_items">
                 {% for question in questions %}
                     {% if question._id in completed %}
-                    {% set status = 'completed' %}
+                        {% set status = 'completed' %}
                     {% else %}
-                    {% set status = 'new' %}
+                        {% set status = 'new' %}
                     {% endif %}
                     <li class="col-xs-12 col-sm-6 col-md-3 single-portfolio {{ question['category']|join(' ') }} {{ status }}">
                         <div class="col-ques" id="{{ status }}">
@@ -173,10 +170,8 @@
 
 
 
-    <!-- Javascript Files
-        ================================================== -->
-    <!-- initialize jQuery Library -->
-
+    <!-- Javascript Files -->
+    {% include "jslibraries.html" %}
     <!-- initialize jQuery Library -->
     <!-- Main jquery -->
     <script type="text/javascript" src="js/jquery.js"></script>
@@ -208,6 +203,8 @@
     <script type="js/javascript" src="js/wow.min.js"></script>
     <!-- Custom js -->
     <script src="js/custom.js"></script>
+    <script src="/js/fixquestions.js"></script>
 
     {% include 'footer.html' %}
+    {% include "jslibraries.html" %}
 {% endblock %}

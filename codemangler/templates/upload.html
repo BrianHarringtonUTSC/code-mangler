@@ -1,7 +1,10 @@
 {% extends "base.html" %}
-
+{% block head %}
+    <link href="/css/datatable.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+{% endblock %}
 {% block content %}
-    {% include 'navbar.html' %}
+    {% include 'navbar-admin.html' %}
     <!-- Top content -->
     <div class="top-content">
         <div class="inner-bg">
@@ -70,4 +73,6 @@
     </div>
 
     </div>
+    {% include 'jslibadmin.html' %}
+    {% include 'jslibraries.html' %}
 {% endblock %}

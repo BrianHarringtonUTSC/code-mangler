@@ -39,8 +39,14 @@ def login_user():
         return render_template('login.html', error='Incorrect password!')
 
     session['username'] = user.username
-    session['logged_in'] = True
-    return redirect(url_for('get_questions'))
+
+    if user.user_type == 'admin':
+        session['admin'] = True
+        session['logged_in'] = True
+        return redirect(url_for('get_admin'))
+    else:
+        session['logged_in'] = True
+        return redirect(url_for('get_questions'))
 
 
 @app.route('/signup', methods=['POST'])
@@ -71,4 +77,5 @@ def signup():
 def logout():
     session.pop('username', None)
     session.pop('logged_in', None)
+    session.pop('admin', None)
     return redirect(url_for('get_login'))

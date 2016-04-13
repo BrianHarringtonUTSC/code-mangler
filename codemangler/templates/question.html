@@ -1,96 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- set charset to interpret file contents -->
-    <meta charset="UTF-8">
+{% extends "base.html" %}
 
-    <!-- title displayed when browser tab is moused over -->
-    <title>Code Mangler</title>
-
-    <!-- CSS definitions -->
+{% block head %}
     <link href="/css/base.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/form-elements.css">
-    <link rel="stylesheet" href="/css/custom.css">
-    <link rel="stylesheet" href="/css/red.css">
-    <link rel="stylesheet" href="/css/style.css">
+{% endblock %}
 
-</head>
+{% block content %}
+    {% include 'navbar.html' %}
+    <main class="container-fluid" id="main-stuff">
+        <h4>{{ question['question'] }}</h4>
+        <p>Input: {{ question['input_description'] }}</p>
+        <p>Output: {{ question['output_description'] }}</p>
 
-<body>
-{% include 'navbar.html' %}
-<main class="container-fluid" id="main-stuff">
-    <h4>{{ question['question'] }}</h4>
-    <p>Input: {{ question['input_description'] }}</p>
-    <p>Output: {{ question['output_description'] }}</p>
-
-    <ul id="lines">
-        <br/>
-        {% for line in lines %}
-            <div class="line" line-num={{ loop.index0 }}>
-                <img class="arrow left-arrow" src="/img/left_arrow.svg" alt="Remove indentation">
-                <img class="arrow right-arrow" src="/img/right_arrow.svg" alt="Add indentation">
-                <li class="code"><span class="text-code">
-                {{ line }}</div></li>
-            </div>
-        {% endfor %}
-        <br/>
-    </ul>
-    <button id="answer-question" value="{{ question['_id'] }}" class="btn btn-primary btn-large">Submit</button>
-
-    <div id="result"></div>
-
-
-</main>  <!-- container-fluid -->
-{% include 'footer.html' %}
-<!-- external JS libs -->
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/code-script.js"></script>
-<script src="/js/jquery.backstretch.min.js"></script>
-<script src="/js/scripts-login.js"></script>
-<!-- Javascript Files
-    ================================================== -->
-<!-- initialize jQuery Library -->
-
-<!-- initialize jQuery Library -->
-<!-- Main jquery -->
-<script type="text/javascript" src="js/jquery.js"></script>
-<!-- Bootstrap jQuery -->
-<script src="js/bootstrap.min.js"></script>
-<!-- Owl Carousel -->
-<script src="js/owl.carousel.min.js"></script>
-<!-- Isotope -->
-<script src="js/jquery.isotope.js"></script>
-<!-- Pretty Photo -->
-<script type="text/javascript" src="js/jquery.prettyPhoto.js"></script>
-<!-- SmoothScroll -->
-<script type="text/javascript" src="js/smooth-scroll.js"></script>
-<!-- Image Fancybox -->
-<script type="text/javascript" src="js/jquery.fancybox.pack.js?v=2.1.5"></script>
-<!-- Counter  -->
-<script type="text/javascript" src="js/jquery.counterup.min.js"></script>
-<!-- waypoints -->
-<script type="text/javascript" src="js/waypoints.min.js"></script>
-<!-- Bx slider -->
-<script type="text/javascript" src="js/jquery.bxslider.min.js"></script>
-<!-- Scroll to top -->
-<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
-<!-- Easing js -->
-<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
-<!-- PrettyPhoto -->
-<script src="js/jquery.singlePageNav.js"></script>
-<!-- Wow Animation -->
-<script type="js/javascript" src="js/wow.min.js"></script>
-<!-- Custom js -->
-<script src="js/custom.js"></script>
-
-<!-- internal JS libs -->
-<script type="text/javascript" src="/js/question.js"></script>
-
-</body>
-</html>
+        <ul id="lines">
+            <br/>
+            {% for line in lines %}
+                <div class="line" line-num={{ loop.index0 }}>
+                    <img class="arrow left-arrow" src="/img/left_arrow.svg" alt="Remove indentation">
+                    <img class="arrow right-arrow" src="/img/right_arrow.svg" alt="Add indentation">
+                    <li class="code"><span class="text-code">
+                    {{ line }}</div></li>
+                </div>
+            {% endfor %}
+            <br/>
+        </ul>
+        <button id="answer-question" value="{{ question['_id'] }}" class="btn btn-primary btn-large">Submit</button>
+        <div id="result"></div>
+    </main>  <!-- container-fluid -->
+    {% include 'footer.html' %}
+    {% include 'jslibraries-question.html' %}
+{% endblock %}

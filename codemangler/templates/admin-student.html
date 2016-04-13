@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block head %}
+    <link href="/css/datatable.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block content %}
+    {% include 'navbar-admin.html' %}
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="container">
+                <div class="table-responsive">
+                    <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>User Type</th>
+                            <th>Completed</th>
+                            <th>Trophies</th>
+                            <th>Open</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>User Type</th>
+                            <th>Completed</th>
+                            <th>Trophies</th>
+                            <th>Open</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        {% for user in users %}
+
+                            <tr>
+                                <td>{{ user.first_name + " " +  user.last_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.user_type }}</td>
+                                <td>{{ user.completed|length }}</td>
+                                <td>{{ user.xp }}</td>
+                                <td>Profile</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'jslibadmin.html' %}
+{% endblock %}

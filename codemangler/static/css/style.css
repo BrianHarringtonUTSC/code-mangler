@@ -19,6 +19,10 @@ body {
     float: left;
 }
 
+.label-form, .btn-save, .btn-delete{
+    color: black;
+}
+
 #initial-pg {
     text-align: center;
 }

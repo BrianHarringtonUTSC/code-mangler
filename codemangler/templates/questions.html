@@ -6,12 +6,12 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="feature_header text-center">
-                        <h3 class="feature_title">Hi <b>{{ name }}</b></h3>
+                        <h3 class="feature_title">Hi <b>{{ user.first_name + " " + user.last_name }}</b></h3>
                         <h4 class="feature_sub">Welcome to Code Mangler</h4>
                         <h5 class="feature_sub">Click on All to start browsing</h5>
                         <div class="divider"></div>
                     </div>
-                </div>  <!-- Col-md-12 End -->
+                </div>
             </div>
         </div>
 
@@ -84,7 +84,7 @@
                             </div>
                             <i class="fa fa-star fa-3x fw"></i>
                             <div class="facts-wrap-num">
-                                <span class="counter">26</span>
+                                <span class="counter">{{ completed|length }}</span>
                             </div>
                         </div>
                         <h6>Completed</h6>
@@ -104,9 +104,9 @@
                                 </div>
                             </div>
                             <i class="fa fa-star-half fa-3x fw"></i>
-                            <div class="facts-wrap-num"><span class="counter">9</span></div>
+                            <div class="facts-wrap-num"><span class="counter">{{ unattempted }}</span></div>
                         </div>
-                        <h6>Attempted</h6>
+                        <h6>Unattempted</h6>
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-12 col-sm-6 columns">
@@ -123,7 +123,7 @@
                                 </div>
                             </div>
                             <i class="fa fa-trophy fa-3x fw"></i>
-                            <div class="facts-wrap-num"><span class="counter">94</span></div>
+                            <div class="facts-wrap-num"><span class="counter">{{ user.xp }}</span></div>
                         </div>
                         <h6>Trophies</h6>
                     </div>
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                             <i class="fa fa-paper-plane fa-3x fw"></i>
-                            <div class="facts-wrap-num"><span class="counter">6</span></div>
+                            <div class="facts-wrap-num"><span class="counter">{{ user.level }}</span></div>
                         </div>
                         <h6>Level</h6>
                     </div>
@@ -150,17 +150,10 @@
             </div> <!-- Conatainer End -->
         </div>    <!-- Fact div ENd -->
     </section>
-    <!-- Counter End -->
 
-    <!-- Counter End -->
     <div class="clearfix"></div>
 
-    <!-- Footer Area Start -->
 
-
-    <!-- Footer Area End -->
-
-    <!-- Back To Top Button -->
     <div id="back-top">
         <a href="#slider_part" class="scroll" data-scroll>
             <button class="btn btn-primary" title="Back to Top"><i class="fa fa-angle-up"></i></button>

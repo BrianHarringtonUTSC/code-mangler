@@ -2,16 +2,15 @@ import json
 import os
 import subprocess
 import tempfile
-from random import shuffle
+from math import ceil
 
 from bson import ObjectId
-from flask import request, render_template, session, redirect, url_for
+from flask import request, render_template, session
 
 from codemangler import app, db
-from codemangler.models.question import GetQuestion, Question, CreateQuestion
-from codemangler.models.user import GetUser, UpdateUser, User, CreateUser
+from codemangler.models.question import GetQuestion, UpdateQuestion
+from codemangler.models.user import GetUser, UpdateUser
 from codemangler.views.users import login_required
-from config import MongoConfig
 
 INDENTATION_AMOUNT = 4
 RESPONSE_SUCCESS = 'Correct'
@@ -24,11 +23,12 @@ def get_questions():
     if 'logged_in' in session and 'username' in session:
         user = GetUser(session['username']).get()
     questions = db.questions.find()
-
-    return render_template('questions.html', questions=questions, completed=user.completed,
-                       name=user.first_name + " " + user.last_name)
-
-
+    unattempted = questions.count() - len(user.completed)
+    return render_template('questions.html',
+                           questions=questions,
+                           completed=user.completed,
+                           unattempted=unattempted,
+                           user=user)
 
 
 @app.route('/question/<question_id>', methods=['GET'])
@@ -40,7 +40,7 @@ def get_question(question_id):
 
     solution = question.solution
     scramble_order = question.scramble_order
-
+    session["try"] = 0
     return render_template('question.html', question=question,
                            lines=[solution[i].lstrip() for i in scramble_order])
 
@@ -90,24 +90,33 @@ def check_answer(question, given_order, given_indentation):
 @app.route('/question/<question_id>', methods=['POST'])
 @login_required
 def answer_question(question_id):
+    session["try"] += 1
     question = GetQuestion(ObjectId(question_id)).get()
+
     if not question:
         return 'Question not found', 404
 
     given_order = json.loads(request.form.get('order', '[]'))
     given_indentation = json.loads(request.form.get('indentation', '[]'))
+
     user = GetUser(session["username"]).get()
-    if ObjectId(question_id) not in user.attempted and user.completed:
-        user.attempted.append(ObjectId(question_id))
-    UpdateUser(user).post()
-    user = GetUser(session["username"]).get()
-    print(user.username, user.first_name, user.attempted, user.completed)
+
+    if ObjectId(question_id) not in user.completed:
+        question.attempts += 1
 
     if check_answer(question, given_order, given_indentation):
         if ObjectId(question_id) not in user.completed:
             user.completed.append(ObjectId(question_id))
-        user.attempted.remove(ObjectId(question_id))
+            if session["try"] > 10:
+                user.xp += question.difficulty
+            else:
+                user.xp += ceil(int(question.difficulty) * 10 / int(session["try"]))
+            user.level = ceil(user.xp / 25)
+            question.success += 1
+        UpdateQuestion(question).post()
         UpdateUser(user).post()
-        return RESPONSE_SUCCESS
+        session.pop("try", None)
+        return RESPONSE_SUCCESS + "<br>Return to home for more challenges"
     else:
-        return RESPONSE_FAILED
+        return RESPONSE_FAILED + "<br>Failed Attempt: " + str(
+            session["try"]) + "<br>More failed attempts results in less trophies"

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block head %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+    {% include 'navbar-admin.html' %}
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text">
+                        <div class="form-box">
+                            <div class="form-top">
+                                <div class="form-top-left">
+                                    <h3>Question</h3>
+                                    <h3>{{ question.question }}</h3>
+                                </div>
+                                <div class="form-top-right">
+                                    <i class="fa fa-pencil"></i>
+                                </div>
+                            </div>
+                            <div class="form-bottom">
+                                <form role="form" action="" method="post" class="upload-form">
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-question">Question</label>
+                                        <input type="text" name="form-question" placeholder="Question..."
+                                               class="form-question form-control" id="form-question"
+                                               value="{{ question.question }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-category">Category</label>
+                                        <input type="text" name="form-category" placeholder="Category..."
+                                               class="form-category form-control" id="form-category"
+                                               value="{{ question.category }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-solution">Code</label>
+				                        	<textarea name="form-solution" placeholder="Copy paste your code..."
+                                                      class="form-solution form-control"
+                                                      id="form-input">{{ question.solution }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-input">Input Description</label>
+				                        	<textarea name="form-input" placeholder="Enter Input Description..."
+                                                      class="form-input form-control"
+                                                      id="form-input">{{ question.input_description }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-output">Output Description</label>
+				                        	<textarea name="form-output" placeholder="Enter Output Description..."
+                                                      class="form-output form-control"
+                                                      id="form-output">{{ question.output_description }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-test">Test Cases</label>
+                                        <input type="text" name="form-test"
+                                               placeholder="Test Cases as 'assert solution(<input>)==<output>'.. eg. 'assert solution([1,2,3])==6'.."
+                                               class="form-test form-control" id="form-test"
+                                               value="{{ question.test_cases }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-difficulty">Difficulty</label>
+                                        <input type="text" name="form-difficulty" placeholder="Difficulty from 1-5..."
+                                               class="form-difficulty form-control" id="form-difficulty"
+                                               value="{{ question.difficulty }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-attempts">Attempted</label>
+                                        <input type="text" name="form-attempted" placeholder="Difficulty from 1-5..."
+                                               class="form-attempted form-control" id="form-attempted"
+                                               value="{{ question.attempts }}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label-form" for="form-solved">Solved</label>
+                                        <input type="text" name="form-solved" placeholder="Difficulty from 1-5..."
+                                               class="form-solved form-control" id="form-solved"
+                                               value="{{ question.success }}" disabled>
+                                    </div>
+                                    <button type="submit" name="submit" class="btn" value="Save">Save</button>
+                                    <button type="submit" name="submit" class="btn" value="Delete">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+    {% include 'jslibadmin.html' %}
+    {% include 'jslibraries.html' %}
+{% endblock %}

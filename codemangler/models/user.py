@@ -81,11 +81,14 @@ class UpdateUser:
 
 
 class GetUser:
-    def __init__(self, username):
-        self.username = username
+    def __init__(self, data):
+        self.data = data
 
     def get(self):
-        user = MongoConfig.user.find_one({'username': self.username})
+        if MongoConfig.user.find_one({'username': self.data}):
+            user = MongoConfig.user.find_one({'username': self.data})
+        elif MongoConfig.user.find_one({'_id': self.data}):
+            user = MongoConfig.user.find_one({'_id': self.data})
         return User(
             user['username'],
             user['password'],

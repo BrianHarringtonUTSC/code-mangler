@@ -58,7 +58,7 @@ $python3 runserver.py
 
 ### Design Choices
 Design choices are as important as application implementations. In this section, I will demonstrate on my choice of design and tools and point out how they connect.
-I used Model-View-Controller pattern, also known as the famous MVC pattern. I chose Python with Flask framework because it is light and gives me the freedom to use routes, models, views and controllers, the 4 major components of MVC pattern.
+I used Model-View-Controller pattern, also known as the famous MVC pattern. I chose Python with Flask framework because it is light and gives me the freedom to use <b>routes, models, views & controllers</b>, the 4 major components of MVC pattern.
 
 #### Routes
 A user <b>requests</b> to view a page by entering a URL:

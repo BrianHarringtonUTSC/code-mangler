@@ -9,10 +9,10 @@ class Question(object):
         """ (Question, ObjectId(), str, list of str, list of int, list of str,
                 str, str, list of str, int, int, int) -> NoneType
 
-        A new Question with necessary unique id, question title, solution as code, order of scramble, test cases,
+        A new Question with necessary data like unique id, question title, solution as code, order of scramble, test cases,
         input and out description, categories, difficulties and number of user attempts/successes
 
-        id must be ObjectId() when it is unknown, for creating an instance of Question to add to the DB
+        id must be ObjectId() when it is a new question, for creating an instance of Question to add to the DB
         """
         self._id = _id
         self.question = question
@@ -28,7 +28,8 @@ class Question(object):
 
 
 class CreateQuestion:
-    """ Takes Question data and populates into the database """
+    """ Takes question data as Question object into a dictionary
+    then populates dictionary into the database question """
 
     def __init__(self, question):
         """ (CreateQuestion, Question) -> NoneType
@@ -57,7 +58,8 @@ class CreateQuestion:
             'attempts': self.question.attempts,
             'success': self.question.success
         }
-
+        # Connect to the question collection
+        # Then insert question_data as an entry
         table = MongoConfig.question
         table.insert(question_data)
 
@@ -91,6 +93,7 @@ class UpdateQuestion:
             'attempts': self.question.attempts,
             'success': self.question.success
         }
+        # Update question entry if _id matches #
         table.update_one(
             {'_id': self.question._id},
             {'$set': question_data}

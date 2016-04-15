@@ -5,10 +5,20 @@ from config import MongoConfig
 
 
 class User(object):
+    """ A User Object """
+
     def __init__(
             self, username, password, first_name, last_name, email,
             _id=None, user_type="regular", active=False, attempted=[],
             completed=[], xp=0, level=0, accountCreated=None, lastModified=None):
+        """ (User, str, str, str, str, str, ObjectId(), str, Boolean, List of ObjectId(),
+        List of ObjectId(), int, int, datetime, datetime) -> NoneType
+
+        A new User with necessary username, password, first and last name, unique id, user type, activeness,
+        attempted and completed questions, trophies/xp, level, data of creating and last modifying account
+
+        id must be ObjectId() when it is a new user, for creating an instance of User to add to the DB
+        """
         self.username = username
         self.password = password
         self.first_name = first_name
@@ -26,10 +36,24 @@ class User(object):
 
 
 class CreateUser:
+    """ Takes user data as User object into a dictionary
+     then populates dictionary into the database user """
+
     def __init__(self, user):
+        """ (CreateUser, User) -> NoneType
+
+        Initializes a new User object
+        """
         self.user = user
 
     def populate(self):
+        """ (CreateUser) -> NoneType
+
+        Convert data from the instance of User object into a Dictionary/JSON
+
+        Populate questions collection with the data from dictionary, in other words,
+                 create a new entry with the dictionary user_data
+        """
         self.user.active = True
         user_data = {
             'username': self.user.username,
@@ -46,16 +70,28 @@ class CreateUser:
             'accountCreated': str(datetime.now())[:16],
             'lastModified': str(datetime.now())[:16]
         }
-
+        # Connect to the question collection #
+        # Then insert question_data as an entry #
         table = MongoConfig.user
         table.insert(user_data)
 
 
 class UpdateUser:
+    """ Takes User data and updates existing user associated with the data """
+
     def __init__(self, user):
+        """ (UpdateUser, User) -> NoneType
+
+        Initializes updated User data
+        """
         self.user = user
 
     def post(self):
+        """ (UpdateUser) -> User
+
+        Update database entry with data associated with User
+                Then return the updated object from the database
+        """
         table = MongoConfig.user
         self.user.lastModified = str(datetime.now())[:16]
         user_data = {
@@ -73,6 +109,7 @@ class UpdateUser:
             'accountCreated': self.user.accountCreated,
             'lastModified': self.user.lastModified
         }
+        # Update user entry if username matches #
         table.update_one(
             {'username': self.user.username},
             {'$set': user_data}
@@ -81,10 +118,21 @@ class UpdateUser:
 
 
 class GetUser:
+    """ Takes user id or username and returns the associated User data
+    from the database as an instance of the User object """
+
     def __init__(self, data):
+        """ (GetUser, ObjectId() or Str) -> NoneType
+
+        Initialize unique user data for the user
+        """
         self.data = data
 
     def get(self):
+        """ (GetUser) -> User
+
+        Return the instance of User object associated with the user data
+        """
         if MongoConfig.user.find_one({'username': self.data}):
             user = MongoConfig.user.find_one({'username': self.data})
         elif MongoConfig.user.find_one({'_id': self.data}):

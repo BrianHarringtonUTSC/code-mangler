@@ -1,6 +1,7 @@
 # Code Mangler
 Code Mangler is an application for beginner programmers to get a better understanding of Python programming language. 
 
+
 ### Features
 - User Accounts (Login & Registration)
 - Questions List by Categories
@@ -15,12 +16,14 @@ Code Mangler is an application for beginner programmers to get a better understa
     - Managing and Deleting Users
     - Giving other Users Admin Access
 
+
 ### Requirements
 - Python 3.5.1 (https://www.python.org/downloads/)
 - Flask 0.10.1 (http://flask.pocoo.org/)
 - Flask-Bcrypt 0.6.0 (https://flask-bcrypt.readthedocs.org/en/latest/)
 - Flask-PyMongo 0.4.1 (https://flask-pymongo.readthedocs.org/en/latest/)
 - MongoDB 3.2 (https://www.mongodb.org/)
+
 
 ### Code Mangler Quick Start Guide
 
@@ -50,8 +53,65 @@ $python3 runserver.py
 - HTTPS
 - Security
 - Tracking User Attempts
-- Fix minor Front-end issues
 - Social Network OAuth (http://pythonhosted.org/Flask-Social/)
+
+
+### Design Choices
+Design choices are as important as application implementations. In this section, I will demonstrate on my choice of design and tools and point out how they connect.
+I used Model-View-Controller pattern, also known as the famous MVC pattern. I chose Python with Flask framework because it is light and gives me the freedom to use routes, models, views and controllers, the 4 major components of MVC pattern.
+
+#### Routes
+A user <b>requests</b> to view a page by entering a URL:
+```HTML
+http://codemangler.utoronto.ca/login
+```
+
+The application matches the URL pattern with a predefined <b>route</b>:
+```
+    http://codemangler.utoronto.ca/'login'
+```
+
+With each <b>route</b> is associated with a controller, more specifically a certain function within the controller, also known as the <b>controller action</b>:
+```python
+@app.route('/login')
+def login():
+    #doSomething
+```
+
+#### Models and Controllers
+The <b>controller action</b> uses the models (user or question model for this case) to retrieve all of the necessary data from a database, places the data in a data structure (dictionary/json in this case), and loads a view, passing along the data structure:
+```python
+@app.route('/login', methods=['GET'])
+def login_user():
+    user_list = MongoConfig.users       # All user entries in a dictionary
+    ..
+    ..
+    if request.form["username"] in user_list:
+        current_user = user_list[request.form["username"]]
+    return render_template('questions.html', current_user)
+
+
+Class MongoConfig:
+    DB_URI = ...
+    client = MongoClient(DB_URI)
+    db = client.collection
+    users = db.accounts
+    questions = db.questions
+```
+
+#### Views
+The <b>view</b>, the basic structure of data that was passed on by <b>controller action</b>, uses it to render the requested page, which is then displayed to the user in their browser.
+```jinja2
+{% for question in questions %}
+  <li>
+    <h2>{{ question.title }}</h2>
+    <div>{{ question.description }}</div>
+  </li>
+{% else %}
+  <li><em>No questions in the database!</em></li>
+{% endfor %}
+```
+
 
 ### Project Structure
 Based on (http://flask.pocoo.org/docs/0.10/patterns/packages/)

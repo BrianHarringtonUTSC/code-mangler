@@ -8,6 +8,12 @@ from config import MongoConfig
 
 
 def login_required(f):
+    '''
+    (function) -> function
+    A decoration function that returns a wraps
+    the template if users isn't logged in
+    '''
+
     @wraps(f)
     def wrap(*args, **kwargs):
         if 'logged_in' in session:

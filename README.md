@@ -1,12 +1,32 @@
-# Code Mangler Quick Start Guide
+# Code Mangler
+Code Mangler is an application for beginner programmers to get a better understanding of Python programming language. 
+
+### Features
+- User Accounts (Login & Registration)
+- Questions List by Categories
+- Questions seperated by Completed and Uncompleted
+- Tracking User Achievements & Stats
+- Tracking Question Stats
+- Reorganizing and Indenting to Solve Mangled Up Code
+- Admin Side
+    - Uploading Questions
+    - Running Test Cases for each Question
+    - Managing and Deleting Questions
+    - Managing and Deleting Users
+    - Giving other Users Admin Access
+
+### Requirements
+- Python 3.5.1 (https://www.python.org/downloads/)
+- Flask 0.10.1 (http://flask.pocoo.org/)
+- Flask-Bcrypt 0.6.0 (https://flask-bcrypt.readthedocs.org/en/latest/)
+- Flask-PyMongo 0.4.1 (https://flask-pymongo.readthedocs.org/en/latest/)
+- MongoDB 3.2 (https://www.mongodb.org/)
+
+### Code Mangler Quick Start Guide
 
 This guide will walk you through deploying Code Mangler locally and tracademic server.
 
-## Requirement
-
-Download Python 3.5: (https://www.python.org/downloads/)
-
-## Usage
+#### Usage
 
 ```console
 $ git clone https://github.com/TanjidIslam/code-mangler.git
@@ -16,17 +36,24 @@ $ source env/bin/activate
 $ pip3 install -r requirements.txt
 ```
 
-### To run locally
+#### To run on local server
 ```console
 $ python3 localserver.py
 ```
 
-###To run on tracademic
+#### To run on tracademic server
 ```console
 $python3 runserver.py
 ```
 
-## Project Structure
+### TODO
+- HTTPS
+- Security
+- Tracking User Attempts
+- Fix minor Front-end issues
+- Social Network OAuth (http://pythonhosted.org/Flask-Social/)
+
+### Project Structure
 Based on (http://flask.pocoo.org/docs/0.10/patterns/packages/)
 
     - Codemangler
@@ -76,8 +103,7 @@ Based on (http://flask.pocoo.org/docs/0.10/patterns/packages/)
 
 
 
-## Project Context
-
+### Project Context
         Codemangler - contains models, views, templates, and front-end files (css, javascript, jqeuery, ajax)
     
             models - This is where models are defined, contains user and question structures, that can be used to create, update and get database entries for user accounts and questions

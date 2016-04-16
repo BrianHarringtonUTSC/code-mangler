@@ -1,3 +1,4 @@
+# Imports
 from flask import Flask
 from flask.ext.bcrypt import Bcrypt
 
@@ -8,5 +9,5 @@ bcrypt = Bcrypt(app)
 app.secret_key = Config.SECRET_KEY
 db = MongoConfig.db
 
-# run app view from users, questions and admin #
+# run app view from users, questions and admin
 from codemangler.views import users, questions, admin

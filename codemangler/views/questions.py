@@ -20,11 +20,6 @@ RESPONSE_FAILED = 'Try Again'
 @app.route('/')
 @login_required
 def get_questions():
-    """ () -> rendered_template
-
-    Returns the rendered template of questions.html with data from list
-    of Question objects, after the user makes a GET request to to home page
-    """
     if 'logged_in' in session and 'username' in session:
         user = GetUser(session['username']).get()
     questions = db.questions.find()
@@ -39,11 +34,6 @@ def get_questions():
 @app.route('/question/<question_id>', methods=['GET'])
 @login_required
 def get_question(question_id):
-    """ (str) -> rendered_template
-
-    Returns the rendered template of question.html with data from the
-    Question objects, after the user makes a GET request to to question page
-    """
     question = GetQuestion(ObjectId(question_id)).get()
     if not question:
         return 'Question not found', 404
@@ -56,10 +46,6 @@ def get_question(question_id):
 
 
 def run_test_cases(question, given_order, given_indentation):
-    """ (str, list of int, list of int) -> Boolean
-
-    Returns True if test cases return True, else False
-    """
     lines = [question.solution[i].strip() for i in question.scramble_order]
 
     code = ''
@@ -86,12 +72,8 @@ def run_test_cases(question, given_order, given_indentation):
 
 
 def check_answer(question, given_order, given_indentation):
-    """ (Question, list of int, list of int) -> Boolean
-
-    Return True if test cases are ran successfully, otherwise, False
-    """
-    correct_indentation = [int(len(line) -
-                               len(line.lstrip())) / INDENTATION_AMOUNT for line in question.solution]
+    correct_indentation = [int(len(line) - len(line.lstrip())) / INDENTATION_AMOUNT for line in question.solution
+                           ]
 
     order_correct = all([question.scramble_order[val] == i for i, val in enumerate(given_order)])
     indentation_correct = given_indentation == correct_indentation
@@ -108,11 +90,6 @@ def check_answer(question, given_order, given_indentation):
 @app.route('/question/<question_id>', methods=['POST'])
 @login_required
 def answer_question(question_id):
-    """ (str) -> str
-
-    Return success message if answer is correct,
-    Otherwise return the failure message
-    """
     session["try"] += 1
     question = GetQuestion(ObjectId(question_id)).get()
 

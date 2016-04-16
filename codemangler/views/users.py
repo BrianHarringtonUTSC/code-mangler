@@ -8,11 +8,11 @@ from config import MongoConfig
 
 
 def login_required(f):
-    """ (function) -> function
-
-    Wrap views for users so that only
-    logged in users can view those pages
-    """
+    '''
+    (function) -> function
+    A decoration function that returns a wraps
+    the template if users isn't logged in
+    '''
 
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -26,31 +26,16 @@ def login_required(f):
 
 @app.route('/login', methods=['GET'])
 def get_login():
-    """ () -> rendered_template
-
-    Returns the rendered template of login.html
-    after the user makes a GET request to 'login'
-    """
     return render_template('login.html')
 
 
 @app.route('/signup', methods=['GET'])
 def get_register():
-    """ () -> rendered_template
-
-    Returns the rendered template of signup.html
-    after the user makes a GET request to 'signup'
-    """
     return render_template('signup.html')
 
 
 @app.route('/login', methods=['POST'])
 def login_user():
-    """ () -> rendered_template
-
-    Returns the rendered template of admin.html or questions.html according
-    to data from user input , after the user makes a POST request to 'login'
-    """
     username = request.form["username"]
     if not MongoConfig.user.find_one({'username': username}):
         return render_template('login.html', error='Username not found!')
@@ -61,8 +46,6 @@ def login_user():
 
     session['username'] = user.username
 
-    # If user type is admin then redirect to admin side #
-    # If user type is regular then redirect to user side #
     if user.user_type == 'admin':
         session['admin'] = True
         session['logged_in'] = True
@@ -74,16 +57,8 @@ def login_user():
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    """ () -> rendered_template
-
-    Returns the rendered template of questions.html
-    according to data from user input for registration,
-    after the user makes a POST request to 'login'
-    """
     username_check = MongoConfig.user.find({'username': request.form['username']}).count() > 0
     email_check = MongoConfig.user.find({'email': request.form['email']}).count() > 0
-
-    # Check if username or email already exists #
     if username_check and email_check:
         return render_template('signup.html', error='Username & Email already exist!')
     elif username_check:
@@ -91,8 +66,6 @@ def signup():
     elif email_check:
         return render_template('signup.html', error='Email already exists!')
     else:
-        # If username and email doesn't exist #
-        # then create a new user instance #
         user = User(
             request.form['username'],
             request.form['repeat-password'],
@@ -108,12 +81,6 @@ def signup():
 @app.route('/logout')
 @login_required
 def logout():
-    """ () -> rendered_template
-
-    Returns the rendered template of login.html,
-    after the user makes a POST request to 'logout'
-    """
-    # Drop data from the cache #
     session.pop('username', None)
     session.pop('logged_in', None)
     session.pop('admin', None)

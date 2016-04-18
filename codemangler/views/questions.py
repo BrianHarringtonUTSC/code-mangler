@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+import sys
 import tempfile
 from math import ceil
 
@@ -56,12 +57,12 @@ def get_question(question_id):
 
 
 def run_test_cases(question, given_order, given_indentation):
-    """ (str, list of int, list of int) -> Boolean
+    """ (str, list of int, list of int) -> Bool
 
     Returns True if test cases return True, else False
     """
     lines = [question.solution[i].strip() for i in question.scramble_order]
-
+    print(lines, file=sys.stderr)
     code = ''
     for i, val in enumerate(given_order):
         code += ' ' * given_indentation[i] * INDENTATION_AMOUNT + lines[val] + "\n"
@@ -74,14 +75,12 @@ def run_test_cases(question, given_order, given_indentation):
 
     try:
         # TODO: pass in python location as an arg so you can specify
-        with open(os.devnull, 'w') as devnull:  # redirect output to dev null
-            res = subprocess.run(["python", f.name], stdout=devnull, stderr=devnull, timeout=1)
-            res.check_returncode()
+        res = subprocess.run(["python", f.name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1)
+        res.check_returncode()
     except Exception:
         return False
     finally:
         os.remove(f.name)
-
     return True
 
 
@@ -94,9 +93,8 @@ def check_answer(question, given_order, given_indentation):
                                len(line.lstrip())) / INDENTATION_AMOUNT for line in question.solution]
 
     order_correct = all([question.scramble_order[val] == i for i, val in enumerate(given_order)])
-    indentation_correct = given_indentation == correct_indentation
 
-    if order_correct and indentation_correct:
+    if order_correct and given_indentation == correct_indentation:
         return True
 
     if not question.test_cases:
@@ -113,7 +111,8 @@ def answer_question(question_id):
     Return success message if answer is correct,
     Otherwise return the failure message
     """
-    session["try"] += 1
+    session['try'] = session.get('try', 0) + 1
+
     question = GetQuestion(ObjectId(question_id)).get()
 
     if not question:

@@ -1,7 +1,3 @@
-/**
- * Created by Tanjid Islam on 12/04/2016.
- */
-
 jQuery(document).ready(function() {
 
     /*

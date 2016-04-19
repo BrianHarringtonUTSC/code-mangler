@@ -39,7 +39,7 @@
                                         <label class="label-form" for="form-solution">Code</label>
 				                        	<textarea name="form-solution" placeholder="Copy paste your code..."
                                                       class="form-solution form-control"
-                                                      id="form-input">{{ question.solution|join(', ') }}</textarea>
+                                                      id="form-input">{{ question.solution|join('\n') }}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="label-form" for="form-input">Input Description</label>
@@ -55,10 +55,9 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="label-form" for="form-test">Test Cases</label>
-                                        <input type="text" name="form-test"
+                                        <textarea type="text" name="form-test"
                                                placeholder="Test Cases as 'assert solution(<input>)==<output>'.. eg. 'assert solution([1,2,3])==6'.."
-                                               class="form-test form-control" id="form-test"
-                                               value="{{ question.test_cases|join(', ') }}">
+                                               class="form-test form-control" id="form-test">{{ question.test_cases|join('\n') }}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="label-form" for="form-difficulty">Difficulty</label>

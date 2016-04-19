@@ -1,3 +1,5 @@
+import sys
+
 from functools import wraps
 from random import shuffle
 
@@ -7,6 +9,7 @@ from flask import request, render_template, session, redirect, url_for
 from codemangler import app, db
 from codemangler.models.question import Question, CreateQuestion, GetQuestion, UpdateQuestion
 from codemangler.models.user import GetUser, UpdateUser
+from codemangler.views.questions import run_code
 from config import MongoConfig
 
 
@@ -88,9 +91,8 @@ def view_question(question_id):
     question = GetQuestion(ObjectId(question_id)).get()
     if not question:
         return 'Question not found', 404
-    solution = "/r/n".join(question.solution)
 
-    return render_template('admin-question.html', question=question, solution=solution)
+    return render_template('admin-question.html', question=question)
 
 
 @app.route('/admin/user/<user_id>', methods=['POST'])
@@ -123,11 +125,16 @@ def edit_question(question_id):
         question = GetQuestion(ObjectId(question_id)).get()
         question.question = request.form['form-question']
         question.category = request.form['form-category'].split(", ")
-        question.solution = request.form['form-solution'].split(", ")
+        question.solution = request.form['form-solution'].split("\r\n")
         question.input_description = request.form['form-input']
         question.output_description = request.form['form-output']
-        question.test_cases = request.form['form-test'].split(", ")
+        question.test_cases = request.form['form-test'].split("\r\n")
         question.difficulty = int(request.form['form-difficulty'])
+
+        code = '\n'.join(question.solution)
+        output = run_code(code, question.test_cases)
+        if len(output):
+            return 'There was an error with your test cases:<br><br>' + output + '<br><br> Press Back to go back.', 400
         UpdateQuestion(question).post()
     elif request.form['submit'] == 'Delete':
         db.questions.remove(ObjectId(question_id))
@@ -165,7 +172,7 @@ def upload_code():
         scramble_order = list(range(len(solution)))
         shuffle(scramble_order)
 
-        tests = request.form['form-test'].split(', ')
+        tests = request.form['form-test'].split('\r\n')
         [x.strip() for x in tests]
 
         category = request.form['form-category'].split(',')
@@ -182,5 +189,12 @@ def upload_code():
             category,
             request.form['form-difficulty']
         )
+
+        code = '\n'.join(question.solution)
+
+        output = run_code(code, question.test_cases)
+        if len(output):
+            return 'There was an error with your test cases:\n' + output + '\n Press Back to go back.', 400
+
         CreateQuestion(question).populate()
         return redirect(url_for('get_questions'))

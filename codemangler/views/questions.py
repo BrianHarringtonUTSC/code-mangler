@@ -56,32 +56,27 @@ def get_question(question_id):
                            lines=[solution[i].lstrip() for i in scramble_order])
 
 
-def run_test_cases(question, given_order, given_indentation):
+def run_code(code, test_cases):
     """ (str, list of int, list of int) -> Bool
 
-    Returns True if test cases return True, else False
+    Returns True if code raises no exception, else False. Writes stdout and stderr to output.
     """
-    lines = [question.solution[i].strip() for i in question.scramble_order]
-    print(lines, file=sys.stderr)
-    code = ''
-    for i, val in enumerate(given_order):
-        code += ' ' * given_indentation[i] * INDENTATION_AMOUNT + lines[val] + "\n"
 
-    for test_case in question.test_cases:
+    for test_case in test_cases:
         code += "\n" + test_case
 
     with tempfile.NamedTemporaryFile(delete=False) as f:
         f.write(bytes(code, 'UTF-8'))
 
+    res = ''
     try:
         # TODO: pass in python location as an arg so you can specify
-        res = subprocess.run(["python", f.name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1)
-        res.check_returncode()
-    except Exception:
-        return False
+        subprocess.check_output(["python", f.name], stderr=subprocess.STDOUT, timeout=1)
+    except subprocess.CalledProcessError as e:
+        res = str(e.output)
     finally:
         os.remove(f.name)
-    return True
+    return res
 
 
 def check_answer(question, given_order, given_indentation):
@@ -100,7 +95,12 @@ def check_answer(question, given_order, given_indentation):
     if not question.test_cases:
         return False
 
-    return run_test_cases(question, given_order, given_indentation)
+    lines = [question.solution[i].strip() for i in question.scramble_order]
+    code = ''
+    for i, val in enumerate(given_order):
+        code += ' ' * given_indentation[i] * INDENTATION_AMOUNT + lines[val] + "\n"
+
+    return not len(run_code(code, question.test_cases))
 
 
 @app.route('/question/<question_id>', methods=['POST'])

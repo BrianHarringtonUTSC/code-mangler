@@ -52,7 +52,6 @@ $python3 runserver.py
 ### TODO
 - HTTPS: Security against DDos, Fraud, etc
 - Tracking User Attempts: Code States
-- Checking Test Cases while uploading problems (Same as running test cases)
 - Social Network OAuth (http://pythonhosted.org/Flask-Social/)
 - User: Edit Profile (Same as Admin's functionality of editing user profiles)
 

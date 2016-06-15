@@ -24,7 +24,7 @@ def login_required(f):
     return wrap
 
 
-@app.route('/login', methods=['GET'])
+@app.route('/adminlogin', methods=['GET'])
 def get_login():
     """ () -> rendered_template
 
@@ -44,7 +44,7 @@ def get_register():
     return render_template('signup.html')
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/adminlogin', methods=['POST'])
 def login_user():
     """ () -> rendered_template
 

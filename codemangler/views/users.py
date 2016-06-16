@@ -1,10 +1,23 @@
+import httplib2
+import json
+import os
+import sys
+
 from functools import wraps
-
-from flask import request, render_template, url_for, redirect, session
-
 from codemangler import app, bcrypt
-from codemangler.models.user import GetUser, User, CreateUser
+from codemangler.models.user import User, UserModel
 from config import MongoConfig
+from flask import request, render_template, url_for, redirect, session
+from oauth2client.client import OAuth2WebServerFlow
+
+# TODO: move values to config
+FLOW = OAuth2WebServerFlow(client_id=os.environ['UTEACH_OAUTH2_CLIENT_ID'],
+                           client_secret=os.environ['UTEACH_OAUTH2_CLIENT_SECRET'],
+                           auth_uri='https://umairidris.auth0.com/authorize',
+                           token_uri='https://umairidris.auth0.com/oauth/token',
+                           scope='openid name email nickname',
+                           redirect_uri='http://localhost:8000/oauth2callback')
+AUTH_URL = FLOW.step1_get_authorize_url() + '&connection=Username-Password-Authentication'
 
 
 def login_required(f):
@@ -19,91 +32,45 @@ def login_required(f):
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
-            return redirect(url_for('get_login'))
+            return redirect(AUTH_URL)
 
     return wrap
 
-
-@app.route('/adminlogin', methods=['GET'])
+@app.route('/login')
 def get_login():
-    """ () -> rendered_template
+    return redirect(AUTH_URL)
 
-    Returns the rendered template of login.html
-    after the user makes a GET request to 'login'
-    """
-    return render_template('login.html')
+@app.route('/oauth2callback')
+def oauth2_callback():
+    code = request.args.get('code')
+    credentials = FLOW.step2_exchange(code)
+    http = httplib2.Http()
+    http = credentials.authorize(http)
+    response, content = http.request('https://umairidris.auth0.com/userinfo')
 
+    if response.status != 200:
+        return response.reason, response.status
 
-@app.route('/signup', methods=['GET'])
-def get_register():
-    """ () -> rendered_template
+    user_dict = json.loads(content.decode("utf-8"))
 
-    Returns the rendered template of signup.html
-    after the user makes a GET request to 'signup'
-    """
-    return render_template('signup.html')
+    # username is email for now
+    user = UserModel.get({'username': user_dict['email']})
 
+    if not user: # new user
+        user = User(user_dict['email'], user_dict['nickname'], user_dict['email'])
+        user = UserModel.create(user)
 
-@app.route('/adminlogin', methods=['POST'])
-def login_user():
-    """ () -> rendered_template
-
-    Returns the rendered template of admin.html or questions.html according
-    to data from user input , after the user makes a POST request to 'login'
-    """
-    username = request.form["username"]
-    if not MongoConfig.user.find_one({'username': username}):
-        return render_template('login.html', error='Username not found!')
-
-    user = GetUser(username).get()
-    if not bcrypt.check_password_hash(user.password, request.form["password"]):
-        return render_template('login.html', error='Incorrect password!')
+        if not user:
+            return 'Failed to create user', 500
 
     session['username'] = user.username
+    session['logged_in'] = True
 
-    # If user type is admin then redirect to admin side #
-    # If user type is regular then redirect to user side #
     if user.user_type == 'admin':
         session['admin'] = True
-        session['logged_in'] = True
         return redirect(url_for('get_admin'))
-    else:
-        session['logged_in'] = True
-        return redirect(url_for('get_questions'))
 
-
-@app.route('/signup', methods=['POST'])
-def signup():
-    """ () -> rendered_template
-
-    Returns the rendered template of questions.html
-    according to data from user input for registration,
-    after the user makes a POST request to 'login'
-    """
-    username_check = MongoConfig.user.find({'username': request.form['username']}).count() > 0
-    email_check = MongoConfig.user.find({'email': request.form['email']}).count() > 0
-
-    # Check if username or email already exists #
-    if username_check and email_check:
-        return render_template('signup.html', error='Username & Email already exist!')
-    elif username_check:
-        return render_template('signup.html', error='Username already exists!')
-    elif email_check:
-        return render_template('signup.html', error='Email already exists!')
-    else:
-        # If username and email doesn't exist #
-        # then create a new user instance #
-        user = User(
-            request.form['username'],
-            request.form['repeat-password'],
-            request.form['first-name'],
-            request.form['last-name'],
-            request.form['email'])
-        CreateUser(user).populate()
-        session['username'] = user.username
-        session['logged_in'] = True
-        return redirect(url_for('get_questions'))
-
+    return redirect('/')
 
 @app.route('/logout')
 @login_required
@@ -113,8 +80,7 @@ def logout():
     Returns the rendered template of login.html,
     after the user makes a POST request to 'logout'
     """
-    # Drop data from the cache #
     session.pop('username', None)
     session.pop('logged_in', None)
     session.pop('admin', None)
-    return redirect(url_for('get_login'))
+    return redirect('/')

@@ -1,6 +1,6 @@
 from config import MongoConfig
 
-
+# TODO: fix this to match user model
 class Question(object):
     """ A Question Object """
 

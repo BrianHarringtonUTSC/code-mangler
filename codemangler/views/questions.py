@@ -10,7 +10,7 @@ from flask import request, render_template, session
 
 from codemangler import app, db
 from codemangler.models.question import GetQuestion, UpdateQuestion
-from codemangler.models.user import GetUser, UpdateUser
+from codemangler.models.user import UserModel
 from codemangler.views.users import login_required
 
 INDENTATION_AMOUNT = 4
@@ -26,8 +26,14 @@ def get_questions():
     Returns the rendered template of questions.html with data from list
     of Question objects, after the user makes a GET request to to home page
     """
-    if 'logged_in' in session and 'username' in session:
-        user = GetUser(session['username']).get()
+    if not 'logged_in' in session or not 'username' in session:
+        return 'Unauthorized', 403
+
+    user = UserModel.get({'username': session['username']})
+    if user is None:
+        return 'User not found', 500
+
+    print(user, file=sys.stderr)
     questions = db.questions.find()
     unattempted = questions.count() - len(user.completed)
     return render_template('questions.html',
@@ -121,7 +127,7 @@ def answer_question(question_id):
     given_order = json.loads(request.form.get('order', '[]'))
     given_indentation = json.loads(request.form.get('indentation', '[]'))
 
-    user = GetUser(session["username"]).get()
+    user = UserModel.get({'username': session['username']})
 
     if ObjectId(question_id) not in user.completed:
         question.attempts += 1
@@ -136,7 +142,7 @@ def answer_question(question_id):
             user.level = ceil(user.xp / 25)
             question.success += 1
         UpdateQuestion(question).post()
-        UpdateUser(user).post()
+        UserModel.update(user)
         session.pop("try", None)
         return RESPONSE_SUCCESS + "<br>Return to home for more challenges"
     else:

@@ -8,7 +8,7 @@ from flask import request, render_template, session, redirect, url_for
 
 from codemangler import app, db
 from codemangler.models.question import Question, CreateQuestion, GetQuestion, UpdateQuestion
-from codemangler.models.user import GetUser, UpdateUser
+from codemangler.models.user import UserModel
 from codemangler.views.questions import run_code
 from config import MongoConfig
 
@@ -72,7 +72,7 @@ def view_user(user_id):
     Returns the rendered template of admin-user.html with data from the User object
     associated with , after the user makes a GET request to 'admin/user/user_id'
     """
-    user = GetUser(ObjectId(user_id)).get()
+    user = UserModel.get(ObjectId(user_id))
     if not user:
         return 'User not found', 404
 
@@ -104,9 +104,9 @@ def edit_user(user_id):
     into User Object, after the user makes a POST request to 'admin/user/<user_id>'
     """
     if request.form['submit'] == 'Save':
-        user = GetUser(ObjectId(user_id)).get()
+        user = UserModel.get(ObjectId(user_id))
         user.user_type = request.form['user-type'].lower()
-        UpdateUser(user).post()
+        UserModel.update(user)
     elif request.form['submit'] == 'Delete':
         db.accounts.remove(ObjectId(user_id))
     return redirect(url_for('get_user_list'))
@@ -149,7 +149,7 @@ def upload_page():
     Returns the rendered template of upload.html with User's first and last name
     """
     if 'logged_in' in session and 'username' in session:
-        user = GetUser(session['username']).get()
+        user = UserModel.get({'username': session['username']})
     return render_template('upload.html', name=user.first_name + " " + user.last_name)
 
 

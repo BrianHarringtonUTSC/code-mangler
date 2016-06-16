@@ -30,5 +30,5 @@ class MongoConfig(Config):
     DB_URI = 'mongodb://tanjid:pwd123@ds059375.mlab.com:59375/code_mangler'
     client = MongoClient(DB_URI)
     db = client.code_mangler
-    user = db.accounts
+    user = db.users
     question = db.questions

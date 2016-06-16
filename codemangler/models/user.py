@@ -30,6 +30,7 @@ class User(object):
         self.last_modified = last_modified
 
 class UserModel(object):
+    """UserModel handles interactions with the database."""
 
     def get(filter_or_id):
         """ (dict or bson.ObjectId) -> User

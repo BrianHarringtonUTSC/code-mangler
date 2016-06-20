@@ -1,6 +1,4 @@
 flask
-flask-bcrypt
 flask-pymongo
 bson
 oauth2client
-requests

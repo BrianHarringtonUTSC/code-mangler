@@ -4,7 +4,7 @@ import os
 import sys
 
 from functools import wraps
-from codemangler import app, bcrypt
+from codemangler import app
 from codemangler.models.user import User, UserModel
 from config import MongoConfig
 from flask import request, render_template, url_for, redirect, session
@@ -42,7 +42,14 @@ def get_login():
 
 @app.route('/oauth2callback')
 def oauth2_callback():
+    error = request.args.get('error')
+    if error:
+        return request.args.get('error_description'), 401
+
     code = request.args.get('code')
+    if not code:
+        return 'No code given', 401
+
     credentials = FLOW.step2_exchange(code)
     http = httplib2.Http()
     http = credentials.authorize(http)

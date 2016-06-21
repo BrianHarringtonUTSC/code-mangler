@@ -18,6 +18,7 @@ FLOW = OAuth2WebServerFlow(client_id=os.environ['UTEACH_OAUTH2_CLIENT_ID'],
                            scope='openid name email nickname',
                            redirect_uri='http://localhost:8000/oauth2callback')
 AUTH_URL = FLOW.step1_get_authorize_url() + '&connection=Username-Password-Authentication'
+REQUIRED_RESPONSE_KEYS = ['email', 'name', 'nickname']
 
 
 def login_required(f):
@@ -60,10 +61,14 @@ def oauth2_callback():
 
     user_dict = json.loads(content.decode("utf-8"))
 
-    # username is email for now
-    user = UserModel.get({'username': user_dict['email']})
+    for key in REQUIRED_RESPONSE_KEYS:
+        if key not in user_dict:
+            return 'Missing {key} in response'.format(key=key), 401
+
+    user = UserModel.get({'email': user_dict['email']})
 
     if not user: # new user
+        # username is email for now
         user = User(user_dict['email'], user_dict['nickname'], user_dict['email'])
         user = UserModel.create(user)
 

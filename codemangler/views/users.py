@@ -44,7 +44,7 @@ def get_login():
 def oauth2_callback():
     error = request.args.get('error')
     if error:
-        return request.args.get('error_description'), 401
+        return '{error}: {error_description}'.format(error=error, error_description=request.args.get('error_description')), 401
 
     code = request.args.get('code')
     if not code:

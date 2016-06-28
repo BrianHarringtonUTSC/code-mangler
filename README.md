@@ -52,9 +52,6 @@ $python3 runserver.py
 - HTTPS: Security against DDos, Fraud, etc
 - Tracking User Attempts: Code States
 - Checking Test Cases while uploading problems (Same as running test cases)
-- Social Network OAuth (http://pythonhosted.org/Flask-Social/)
-- User: Edit Profile (Same as Admin's functionality of editing user profiles)
-
 
 ### Design Choices
 Design choices are as important as application implementations. In this section, I will demonstrate on my choice of design and tools and point out how they connect.
@@ -111,57 +108,6 @@ The <b>view</b>, the basic structure of data that was passed on by <b>controller
   <li><em>No questions in the database!</em></li>
 {% endfor %}
 ```
-
-
-### Project Structure
-Based on (http://flask.pocoo.org/docs/0.10/patterns/packages/)
-
-    - Codemangler
-        - models
-            - question.py
-            - user.py
-
-        - views
-            - admin.py
-            - questions.py
-            - users.py
-
-        - templates
-            - admin.html
-            - admin-question.html
-            - admin-questions.html
-            - admin-user.html
-            - admin-users.html
-            - base.html
-            - footer.html
-            - head.html
-            - head-question.html
-            - jslibadmin.html
-            - jslibraries.html
-            - jslibraries-question.html
-            - login.html
-            - navbar.html
-            - navbar-admin.html
-            - question.html
-            - questions.html
-            - signup.html
-            - upload.html
-
-        - static
-            - bootstrap/..
-            - css/..
-            - font-awesome/..
-            - img/..
-            - js/..
-
-
-    - __init__.py
-    - config.py
-    - requirements.txt
-    - localserver.py
-    - runserver.py
-
-
 
 ### Project Context
         Codemangler - contains models, views, templates, and front-end files (css, javascript, jqeuery, ajax)
